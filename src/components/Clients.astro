@@ -1,0 +1,96 @@
+---
+const clients = [
+    "TechStart",
+    "InnovateCorp",
+    "FutureSystems",
+    "DataFlow",
+    "CloudNine",
+    "AlphaWave",
+    "NextGen",
+    "QuantumSoft",
+];
+---
+
+<section class="clients-section">
+    <div class="container">
+        <p class="clients-title">Empresas que confían en nosotros</p>
+        <div class="marquee-wrapper">
+            <div class="marquee-content">
+                {
+                    clients.map((client) => (
+                        <div class="client-item">{client}</div>
+                    ))
+                }
+                <!-- Duplicate for seamless loop -->
+                {
+                    clients.map((client) => (
+                        <div class="client-item">{client}</div>
+                    ))
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .clients-section {
+        padding: var(--spacing-lg) 0;
+        border-bottom: 1px solid var(--border-color);
+        background: var(--color-bg);
+        overflow: hidden;
+    }
+
+    .clients-title {
+        text-align: center;
+        font-size: 0.9rem;
+        color: var(--color-text-muted);
+        margin-bottom: var(--spacing-lg);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .marquee-wrapper {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+        mask-image: linear-gradient(
+            to right,
+            transparent,
+            black 10%,
+            black 90%,
+            transparent
+        );
+    }
+
+    .marquee-content {
+        display: flex;
+        gap: 4rem;
+        width: max-content;
+        animation: scroll 30s linear infinite;
+    }
+
+    .client-item {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--color-text-muted);
+        opacity: 0.5;
+        white-space: nowrap;
+        transition:
+            opacity 0.3s,
+            color 0.3s;
+    }
+
+    .client-item:hover {
+        opacity: 1;
+        color: var(--color-text);
+    }
+
+    @keyframes scroll {
+        from {
+            transform: translateX(0);
+        }
+        to {
+            transform: translateX(-50%);
+        }
+    }
+</style>

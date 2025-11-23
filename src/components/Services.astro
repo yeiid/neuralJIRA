@@ -1,0 +1,85 @@
+---
+import { getCollection } from "astro:content";
+
+const services = await getCollection("services");
+const sortedServices = services.sort((a, b) => a.data.order - b.data.order);
+---
+
+<section id="servicios" class="section services">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Nuestros Servicios</h2>
+            <p class="section-subtitle">
+                Soluciones diseñadas para el crecimiento
+            </p>
+        </div>
+
+        <div class="services-grid">
+            {
+                sortedServices.map((service) => (
+                    <div class="service-card">
+                        <div class="service-icon">{service.data.icon}</div>
+                        <h3 class="service-title">{service.data.title}</h3>
+                        <p class="service-description">
+                            {service.data.description}
+                        </p>
+                        <div class="service-content">{service.body}</div>
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</section>
+
+<style>
+    .section-header {
+        text-align: center;
+        margin-bottom: var(--spacing-xl);
+    }
+
+    .section-title {
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .services-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: var(--spacing-lg);
+    }
+
+    .service-card {
+        background: var(--color-bg-secondary);
+        padding: var(--spacing-lg);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border-color);
+        transition:
+            transform 0.3s,
+            border-color 0.3s;
+    }
+
+    .service-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--color-primary);
+    }
+
+    .service-icon {
+        font-size: 2.5rem;
+        margin-bottom: var(--spacing-md);
+    }
+
+    .service-title {
+        margin-bottom: var(--spacing-sm);
+        color: var(--color-text);
+    }
+
+    .service-description {
+        color: var(--color-text-muted);
+        margin-bottom: var(--spacing-md);
+    }
+
+    .service-content {
+        font-size: 0.9rem;
+        color: var(--color-text-muted);
+        opacity: 0.8;
+    }
+</style>

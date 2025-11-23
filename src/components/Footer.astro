@@ -1,0 +1,85 @@
+---
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="footer">
+    <div class="container footer-content">
+        <div class="footer-brand">
+            <span class="logo-text"
+                >Neural<span class="text-gradient">JIRA</span></span
+            >
+            <p>Transformando startups con tecnología.</p>
+        </div>
+        <div class="footer-links">
+            <div class="link-group">
+                <h4>Empresa</h4>
+                <a href="#inicio">Inicio</a>
+                <a href="#servicios">Servicios</a>
+                <a href="#contacto">Contacto</a>
+            </div>
+            <div class="link-group">
+                <h4>Legal</h4>
+                <a href="#">Privacidad</a>
+                <a href="#">Términos</a>
+            </div>
+        </div>
+    </div>
+    <div class="container copyright">
+        <p>&copy; {currentYear} NeuralJIRA. Todos los derechos reservados.</p>
+    </div>
+</footer>
+
+<style>
+    .footer {
+        background: var(--color-bg);
+        border-top: 1px solid var(--border-color);
+        padding: var(--spacing-xl) 0 var(--spacing-lg);
+        margin-top: auto;
+    }
+
+    .footer-content {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: var(--spacing-xl);
+        margin-bottom: var(--spacing-xl);
+    }
+
+    .footer-brand .logo-text {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--color-text);
+        display: block;
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .footer-links {
+        display: flex;
+        gap: var(--spacing-xl);
+    }
+
+    .link-group h4 {
+        font-size: 1rem;
+        margin-bottom: var(--spacing-md);
+        color: var(--color-text);
+    }
+
+    .link-group a {
+        display: block;
+        color: var(--color-text-muted);
+        margin-bottom: var(--spacing-sm);
+        font-size: 0.9rem;
+    }
+
+    .link-group a:hover {
+        color: var(--color-primary);
+    }
+
+    .copyright {
+        text-align: center;
+        padding-top: var(--spacing-lg);
+        border-top: 1px solid var(--border-color);
+        font-size: 0.85rem;
+        color: var(--color-text-muted);
+    }
+</style>

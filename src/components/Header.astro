@@ -1,0 +1,65 @@
+---
+
+---
+
+<header class="header">
+    <div class="container header-content">
+        <a href="/" class="logo">
+            Neural<span class="text-gradient">JIRA</span>
+        </a>
+        <nav class="nav">
+            <a href="#inicio" class="nav-link">Inicio</a>
+            <a href="#servicios" class="nav-link">Servicios</a>
+            <a href="#contacto" class="nav-link btn btn-secondary">Contacto</a>
+        </nav>
+    </div>
+</header>
+
+<style>
+    .header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: rgba(10, 10, 10, 0.8);
+        backdrop-filter: blur(10px);
+        z-index: 1000;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .header-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 70px;
+    }
+
+    .logo {
+        font-size: 1.5rem;
+        font-weight: 700;
+        text-decoration: none;
+        color: var(--color-text);
+    }
+
+    .nav {
+        display: flex;
+        gap: var(--spacing-md);
+        align-items: center;
+    }
+
+    .nav-link {
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: var(--color-text-muted);
+    }
+
+    .nav-link:hover {
+        color: var(--color-text);
+    }
+
+    .nav-link.btn {
+        color: white;
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+</style>

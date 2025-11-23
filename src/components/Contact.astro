@@ -1,0 +1,132 @@
+---
+
+---
+
+<section id="contacto" class="section contact">
+    <div class="container">
+        <div class="contact-wrapper">
+            <div class="contact-info">
+                <h2 class="section-title">Hablemos de tu proyecto</h2>
+                <p>
+                    ¿Listo para escalar tu startup? Cuéntanos tus desafíos y te
+                    ayudaremos a encontrar la solución tecnológica adecuada.
+                </p>
+                <div class="info-item">
+                    <strong>Email:</strong> contacto@neuraljira.com
+                </div>
+            </div>
+
+            <form
+                class="contact-form"
+                name="contact"
+                method="POST"
+                data-netlify="true"
+            >
+                <div class="form-group">
+                    <label for="name">Nombre</label>
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        required
+                        placeholder="Tu nombre"
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        required
+                        placeholder="tu@email.com"
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="message">Mensaje</label>
+                    <textarea
+                        id="message"
+                        name="message"
+                        rows="4"
+                        required
+                        placeholder="¿En qué podemos ayudarte?"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary"
+                    >Enviar Mensaje</button
+                >
+            </form>
+        </div>
+    </div>
+</section>
+
+<style>
+    .contact {
+        background: linear-gradient(
+            to bottom,
+            var(--color-bg),
+            var(--color-bg-secondary)
+        );
+    }
+
+    .contact-wrapper {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--spacing-xl);
+        align-items: start;
+    }
+
+    @media (max-width: 768px) {
+        .contact-wrapper {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .contact-info h2 {
+        margin-bottom: var(--spacing-md);
+    }
+
+    .contact-info p {
+        margin-bottom: var(--spacing-lg);
+        font-size: 1.1rem;
+    }
+
+    .contact-form {
+        background: var(--color-bg);
+        padding: var(--spacing-lg);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border-color);
+    }
+
+    .form-group {
+        margin-bottom: var(--spacing-md);
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: var(--spacing-sm);
+        font-weight: 500;
+        color: var(--color-text);
+    }
+
+    .form-group input,
+    .form-group textarea {
+        width: 100%;
+        padding: 0.75rem;
+        background: var(--color-bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-sm);
+        color: var(--color-text);
+        font-family: inherit;
+        transition: border-color 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: var(--color-primary);
+    }
+
+    .btn {
+        width: 100%;
+    }
+</style>
