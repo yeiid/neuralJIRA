@@ -1,43 +1,50 @@
-# Astro Starter Kit: Minimal
+# NeuralJIRA
 
-```sh
-npm create astro@latest -- --template minimal
+Landing page moderna y escalable para NeuralJIRA, una agencia de asesoría y desarrollo de software para negocios.
+
+## 🚀 Características
+
+- **Diseño Premium**: Estética "Dark Mode" con gradientes y glassmorphism.
+- **Alto Rendimiento**: Construido con [Astro](https://astro.build) para tiempos de carga mínimos.
+- **Contenido Escalable**: Gestión de servicios mediante archivos Markdown.
+- **Secciones Clave**:
+    - Hero con propuesta de valor.
+    - Marquee de clientes (prueba social).
+    - Grid de servicios dinámico.
+    - Portafolio de proyectos destacados.
+    - Formulario de contacto.
+
+## 🛠️ Instalación y Uso
+
+1.  **Instalar dependencias**:
+    ```sh
+    npm install
+    ```
+
+2.  **Iniciar servidor de desarrollo**:
+    ```sh
+    npm run dev
+    ```
+
+3.  **Construir para producción**:
+    ```sh
+    npm run build
+    ```
+
+## 📝 Gestión de Contenido
+
+### Agregar un nuevo servicio
+Crea un archivo `.md` en `src/content/services/` con el siguiente formato:
+
+```markdown
+---
+title: "Nombre del Servicio"
+description: "Breve descripción para la tarjeta."
+order: 3
+icon: "🚀"
+---
+Descripción detallada del servicio...
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+### Personalización
+Los colores y tipografía se pueden ajustar en `src/styles/global.css`.

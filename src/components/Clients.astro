@@ -1,14 +1,5 @@
 ---
-const clients = [
-    "TechStart",
-    "InnovateCorp",
-    "FutureSystems",
-    "DataFlow",
-    "CloudNine",
-    "AlphaWave",
-    "NextGen",
-    "QuantumSoft",
-];
+const clients = ["reto-fitness"];
 ---
 
 <section class="clients-section">
@@ -16,12 +7,6 @@ const clients = [
         <p class="clients-title">Empresas que confían en nosotros</p>
         <div class="marquee-wrapper">
             <div class="marquee-content">
-                {
-                    clients.map((client) => (
-                        <div class="client-item">{client}</div>
-                    ))
-                }
-                <!-- Duplicate for seamless loop -->
                 {
                     clients.map((client) => (
                         <div class="client-item">{client}</div>
@@ -53,27 +38,21 @@ const clients = [
         position: relative;
         width: 100%;
         overflow: hidden;
-        mask-image: linear-gradient(
-            to right,
-            transparent,
-            black 10%,
-            black 90%,
-            transparent
-        );
     }
 
     .marquee-content {
         display: flex;
         gap: 4rem;
-        width: max-content;
-        animation: scroll 30s linear infinite;
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
     }
 
     .client-item {
         font-size: 1.5rem;
         font-weight: 700;
         color: var(--color-text-muted);
-        opacity: 0.5;
+        opacity: 0.8;
         white-space: nowrap;
         transition:
             opacity 0.3s,
@@ -83,14 +62,5 @@ const clients = [
     .client-item:hover {
         opacity: 1;
         color: var(--color-text);
-    }
-
-    @keyframes scroll {
-        from {
-            transform: translateX(0);
-        }
-        to {
-            transform: translateX(-50%);
-        }
     }
 </style>
