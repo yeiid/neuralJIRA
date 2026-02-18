@@ -13,6 +13,7 @@ const projects = [
             "Plataforma de seguimiento de rutinas y gestión de membresías.",
         tags: ["SaaS", "Analytics", "Pagos"],
         icon: "💪",
+        link: "https://demo-html-five.vercel.app/",
     },
     {
         title: "Tienda Online",
@@ -20,6 +21,7 @@ const projects = [
             "E-commerce escalable con gestión de inventario automatizada.",
         tags: ["E-commerce", "Stripe", "SEO"],
         icon: "🛍️",
+        link: "https://jamuchee.vercel.app/",
     },
     {
         title: "Administración",
@@ -55,6 +57,16 @@ const projects = [
                                     <span class="tag">{tag}</span>
                                 ))}
                             </div>
+                            {project.link && (
+                                <a
+                                    href={project.link}
+                                    class="project-link"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    Ver Demo <span>→</span>
+                                </a>
+                            )}
                         </div>
                         <div class="card-overlay" />
                     </div>
@@ -141,6 +153,34 @@ const projects = [
         border-radius: 999px;
         color: var(--color-text-muted);
         border: 1px solid var(--border-color);
+    }
+
+    .project-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: var(--spacing-lg);
+        color: var(--color-primary);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.9rem;
+        transition:
+            color 0.3s,
+            gap 0.3s;
+        width: fit-content;
+    }
+
+    .project-link:hover {
+        color: var(--color-primary-light, #818cf8);
+        gap: 0.75rem;
+    }
+
+    .project-link span {
+        transition: transform 0.3s;
+    }
+
+    .project-link:hover span {
+        transform: translateX(3px);
     }
 
     .card-overlay {
