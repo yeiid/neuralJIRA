@@ -1,5 +1,8 @@
 ---
-const clients = ["reto-fitness"];
+const clients = [
+    { name: "Reto Fitness", logo: "/icoretofitnes.ico", url: "https://retocarlenis.neuraljira.tech/" },
+    { name: "Cactunet", logo: "/cactunet.ico", url: "https://cactusnet.com.co/" }
+];
 ---
 
 <section class="clients-section">
@@ -9,7 +12,9 @@ const clients = ["reto-fitness"];
             <div class="marquee-content">
                 {
                     clients.map((client) => (
-                        <div class="client-item">{client}</div>
+                        <a href={client.url} target="_blank" rel="noopener noreferrer" class="client-item" title={client.name}>
+                            <img src={client.logo} alt={`Logo de ${client.name}`} />
+                        </a>
                     ))
                 }
             </div>
@@ -49,18 +54,28 @@ const clients = ["reto-fitness"];
     }
 
     .client-item {
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: var(--color-text-muted);
-        opacity: 0.8;
-        white-space: nowrap;
-        transition:
-            opacity 0.3s,
-            color 0.3s;
+        opacity: 0.6;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+
+    .client-item img {
+        height: 50px;
+        width: auto;
+        object-fit: contain;
+        filter: grayscale(100%);
+        transition: filter 0.3s ease;
     }
 
     .client-item:hover {
         opacity: 1;
-        color: var(--color-text);
+        transform: scale(1.05);
+    }
+
+    .client-item:hover img {
+        filter: grayscale(0%);
     }
 </style>

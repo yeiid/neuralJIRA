@@ -5,12 +5,17 @@
 <header class="header">
     <div class="container header-content">
         <a href="/" class="logo">
-            Neural<span class="text-gradient">JIRA</span>
+            <img src="/logo.png" alt="NeuralJIRA Logo" class="logo-img" />
+            <span>neuraljira.tech</span>
         </a>
-        <nav class="nav">
-            <a href="#inicio" class="nav-link">Inicio</a>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+        <nav class="nav" id="nav-links">
+            <a href="#inicio"    class="nav-link">Inicio</a>
             <a href="#servicios" class="nav-link">Servicios</a>
-            <a href="#contacto" class="nav-link btn btn-secondary">Contacto</a>
+            <a href="#proyectos" class="nav-link">Proyectos</a>
+            <a href="#contacto"  class="nav-link nav-cta">Contacto</a>
         </nav>
     </div>
 </header>
@@ -18,48 +23,122 @@
 <style>
     .header {
         position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        background: rgba(10, 10, 10, 0.8);
-        backdrop-filter: blur(10px);
-        z-index: 1000;
-        border-bottom: 1px solid var(--border-color);
+        top: 0; left: 0; right: 0; z-index: 100;
+        display: flex; align-items: center;
+        background: rgba(11,15,26,0.85);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
     }
 
     .header-content {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        height: 70px;
+        height: 68px;
+        max-width: 1000px;
     }
 
     .logo {
-        font-size: 1.5rem;
-        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-family: var(--font-mono);
+        font-size: .85rem; font-weight: 600;
+        color: var(--accent);
+        letter-spacing: .05em;
         text-decoration: none;
-        color: var(--color-text);
     }
 
+    .logo-img {
+        width: 24px;
+        height: 24px;
+        object-fit: contain;
+    }
+
+    /* ── Nav links ── */
     .nav {
         display: flex;
-        gap: var(--spacing-md);
+        gap: 2rem;
         align-items: center;
     }
 
     .nav-link {
-        font-size: 0.95rem;
-        font-weight: 500;
-        color: var(--color-text-muted);
+        font-size: .85rem;
+        color: var(--muted);
+        text-decoration: none;
+        letter-spacing: .04em;
+        transition: color .2s;
     }
+    .nav-link:hover            { color: var(--white); }
+    .nav-link--accent          { color: var(--electric); }
+    .nav-link--accent:hover    { color: var(--white); }
 
-    .nav-link:hover {
-        color: var(--color-text);
+    .nav-cta {
+        font-family: var(--font-mono); font-size: .78rem;
+        color: var(--accent);
+        border: 1px solid rgba(249,115,22,.35);
+        padding: .3rem .85rem; border-radius: 2px;
+        letter-spacing: .04em;
+        transition: background .2s, color .2s;
     }
+    .nav-cta:hover { background: var(--accent); color: var(--ink); }
 
-    .nav-link.btn {
-        color: white;
-        padding: 0.5rem 1rem;
-        font-size: 0.9rem;
+    /* ── Hamburger (mobile) ── */
+    .nav-toggle {
+        display: none;
+        flex-direction: column; gap: 5px;
+        background: none; border: none; cursor: pointer;
+        padding: .4rem; z-index: 110;
+    }
+    .nav-toggle span {
+        display: block; width: 22px; height: 2px;
+        background: var(--text); border-radius: 2px;
+        transition: transform .25s, opacity .25s;
+    }
+    .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-toggle.open span:nth-child(2) { opacity: 0; }
+    .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    @media (max-width: 640px) {
+        .nav-toggle { display: flex; }
+        .nav {
+            display: none;
+            position: fixed; top: 0; left: 0; right: 0;
+            flex-direction: column; gap: 0;
+            background: var(--deep);
+            border-bottom: 1px solid var(--border);
+            padding: 5rem 2rem 2rem;
+            z-index: 105;
+        }
+        .nav.mobile-open { display: flex; }
+        .nav .nav-link { 
+            display: block; padding: 1rem 0;
+            font-size: 1rem; color: var(--light);
+            border-bottom: 1px solid var(--border);
+        }
+        .nav-cta {
+            margin-top: .5rem;
+            text-align: center;
+        }
     }
 </style>
+
+<script>
+    const toggle = document.getElementById('nav-toggle');
+    const links  = document.getElementById('nav-links');
+    if (toggle && links) {
+        toggle.addEventListener('click', () => {
+            const open = links.classList.toggle('mobile-open');
+            toggle.classList.toggle('open', open);
+            toggle.setAttribute('aria-expanded', String(open));
+        });
+        links.querySelectorAll('a').forEach(a => {
+            a.addEventListener('click', () => {
+                links.classList.remove('mobile-open');
+                toggle.classList.remove('open');
+                toggle.setAttribute('aria-expanded', 'false');
+            });
+        });
+    }
+</script>
+
