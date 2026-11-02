@@ -6,16 +6,17 @@
     <div class="container header-content">
         <a href="/" class="logo">
             <img src="/logo.png" alt="NeuralJIRA Logo" class="logo-img" />
-            <span>neuraljira.tech</span>
+            <span class="logo-brand">neuraljira<span class="logo-dot">.tech</span></span>
         </a>
         <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú" aria-expanded="false">
             <span></span><span></span><span></span>
         </button>
         <nav class="nav" id="nav-links">
-            <a href="#inicio"    class="nav-link">Inicio</a>
-            <a href="#servicios" class="nav-link">Servicios</a>
-            <a href="#proyectos" class="nav-link">Proyectos</a>
-            <a href="#contacto"  class="nav-link nav-cta">Contacto</a>
+            <a href="#inicio"         class="nav-link">Inicio</a>
+            <a href="#quienes-somos"  class="nav-link">Quiénes Somos</a>
+            <a href="#ecosistema"     class="nav-link">Ecosistema</a>
+            <a href="#servicios"      class="nav-link">Servicios</a>
+            <a href="#contacto"       class="nav-link nav-cta">Contacto</a>
         </nav>
     </div>
 </header>
@@ -25,63 +26,87 @@
         position: fixed;
         top: 0; left: 0; right: 0; z-index: 100;
         display: flex; align-items: center;
-        background: rgba(11,15,26,0.85);
-        backdrop-filter: blur(12px);
-        border-bottom: 1px solid var(--border);
+        background: rgba(11, 15, 26, 0.8);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
     }
 
     .header-content {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        height: 68px;
-        max-width: 1000px;
+        height: 70px;
+        max-width: 1100px;
     }
 
     .logo {
         display: flex;
         align-items: center;
-        gap: 0.6rem;
+        gap: 0.65rem;
         font-family: var(--font-mono);
-        font-size: .85rem; font-weight: 600;
-        color: var(--accent);
-        letter-spacing: .05em;
+        font-size: 0.95rem; 
+        font-weight: 700;
+        color: var(--white);
+        letter-spacing: 0.03em;
         text-decoration: none;
+        transition: opacity 0.2s;
     }
+    .logo:hover { opacity: 0.9; }
 
     .logo-img {
-        width: 24px;
-        height: 24px;
+        width: 26px;
+        height: 26px;
         object-fit: contain;
+        filter: drop-shadow(0 0 8px rgba(13, 236, 200, 0.4));
+    }
+
+    .logo-brand {
+        color: var(--white);
+    }
+
+    .logo-dot {
+        color: #0decc8;
     }
 
     /* ── Nav links ── */
     .nav {
         display: flex;
-        gap: 2rem;
+        gap: 1.8rem;
         align-items: center;
     }
 
     .nav-link {
-        font-size: .85rem;
-        color: var(--muted);
+        font-size: 0.86rem;
+        font-weight: 500;
+        color: var(--text);
         text-decoration: none;
-        letter-spacing: .04em;
-        transition: color .2s;
+        letter-spacing: 0.02em;
+        transition: color 0.2s, transform 0.2s;
     }
-    .nav-link:hover            { color: var(--white); }
+    .nav-link:hover            { color: #ffffff; }
     .nav-link--accent          { color: var(--electric); }
     .nav-link--accent:hover    { color: var(--white); }
 
     .nav-cta {
-        font-family: var(--font-mono); font-size: .78rem;
-        color: var(--accent);
-        border: 1px solid rgba(249,115,22,.35);
-        padding: .3rem .85rem; border-radius: 2px;
-        letter-spacing: .04em;
-        transition: background .2s, color .2s;
+        font-family: var(--font-mono); 
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: #0decc8;
+        background: rgba(13, 236, 200, 0.08);
+        border: 1px solid rgba(13, 236, 200, 0.35);
+        padding: 0.35rem 1rem; 
+        border-radius: 9999px;
+        letter-spacing: 0.04em;
+        box-shadow: 0 0 15px rgba(13, 236, 200, 0.1);
+        transition: all 0.25s ease;
     }
-    .nav-cta:hover { background: var(--accent); color: var(--ink); }
+    .nav-cta:hover { 
+        background: #0decc8; 
+        color: #0B0F1A; 
+        box-shadow: 0 0 20px rgba(13, 236, 200, 0.35);
+        transform: translateY(-1px);
+    }
 
     /* ── Hamburger (mobile) ── */
     .nav-toggle {

@@ -1,0 +1,384 @@
+---
+// Ecosystem.astro — Desglose Integral del Ecosistema NeuralJIRA
+const socialProjects = [
+  {
+    name: "ECORAICES",
+    subtitle: "Eco-Tech & Geodatos",
+    desc: "Plataforma ambiental para registro y geolocalización de árboles nativos. Arquitectura offline-first para funcionar en zonas sin conectividad.",
+    icon: "🌳",
+    tag: "Ambiental / Offline"
+  },
+  {
+    name: "practicaWEB",
+    subtitle: "Laboratorio Educativo",
+    desc: "Talleres y recursos interactivos de desarrollo web moderno para estudiantes y desarrolladores autodidactas.",
+    icon: "💻",
+    tag: "Educación Abierta"
+  },
+  {
+    name: "GUAJIRAMESH",
+    subtitle: "Red WiFi Mesh Comunitaria",
+    desc: "Infraestructura descentralizada de conectividad para escuelas y barrios con OpenWrt, B.A.T.M.A.N. adv, Headscale VPN y sincronización LAN offline-first en Rust (sync-lan).",
+    icon: "📡",
+    tag: "Infraestructura & Conectividad"
+  },
+  {
+    name: "llamacppF",
+    subtitle: "Edge AI Distribuido",
+    desc: "Inferencia de LLMs distribuida sobre LAN y USB combinando PCs Linux y celulares Android con Termux sin GPUs privativas.",
+    icon: "🤖",
+    tag: "IA Democratizada"
+  },
+  {
+    name: "PYQUEST",
+    subtitle: "Gamificación Python",
+    desc: "Plataforma lúdica para enseñar lógica algorítmica y programación en Python a jóvenes en escuelas públicas.",
+    icon: "🎮",
+    tag: "Formación STEM"
+  }
+];
+
+const economicProjects = [
+  {
+    name: "transpoSYS",
+    subtitle: "Logística y Transporte",
+    desc: "Software de gestión de despachos, control de rutas, liquidación y monitoreo para flotas de transporte terrestre.",
+    icon: "🚐",
+    tag: "B2B / Operaciones"
+  },
+  {
+    name: "gymtrack",
+    subtitle: "SaaS Fitness & Go Server",
+    desc: "Gestión de clientes y accesos para gimnasios con backend en Go v1.24 y firmas criptográficas Ed25519 offline.",
+    icon: "🏋️",
+    tag: "SaaS Recurrente"
+  },
+  {
+    name: "inventerSYS (ADN)",
+    subtitle: "SaaS Multi-Tenant 3D",
+    desc: "Gestión de bodegas en tiempo real con gemelo digital 3D y app PWA para eventos de alta concurrencia (Central Cervecera).",
+    icon: "🧬",
+    tag: "Enterprise SaaS"
+  },
+  {
+    name: "ecommers",
+    subtitle: "Motores E-commerce",
+    desc: "Plataformas de venta online de alto rendimiento con sincronización automática de stock y cobro por pasarelas locales.",
+    icon: "🛍️",
+    tag: "Comercio Digital"
+  },
+  {
+    name: "monitoreo FTTH",
+    subtitle: "Infraestructura de Red",
+    desc: "Monitoreo y diagnóstico del estado de puertos y enlaces de fibra óptica para operadores y redes comunitarias.",
+    icon: "🌐",
+    tag: "Telecomunicaciones"
+  }
+];
+---
+
+<section id="ecosistema" class="section ecosystem">
+  <div class="container">
+    <div class="section-header">
+      <div class="badge-wrapper">
+        <span class="badge">ESTRUCTURA DE STARTUP</span>
+      </div>
+      <h2 class="section-title">
+        Arquitectura de <span class="text-gradient">Nuestro Ecosistema</span>
+      </h2>
+      <p class="section-subtitle">
+        Un modelo balanceado donde la tracción de soluciones B2B y SaaS financia e impulsa el impacto social y tecnológico en el territorio.
+      </p>
+    </div>
+
+    <!-- Main Dual Pillars -->
+    <div class="pillars-grid">
+      <!-- Aspecto Social -->
+      <div class="pillar-box social-pillar">
+        <header class="pillar-header">
+          <div class="pillar-title-group">
+            <span class="pillar-tag">IMPACTO & SOBERANÍA</span>
+            <h3 class="pillar-title">aspecto social</h3>
+          </div>
+          <span class="pillar-indicator social-indicator">🌱 Tech for Good</span>
+        </header>
+
+        <div class="projects-stack">
+          {socialProjects.map((item) => (
+            <div class="project-mini-card social-card">
+              <div class="card-icon">{item.icon}</div>
+              <div class="card-details">
+                <div class="card-meta">
+                  <h4 class="card-name">{item.name}</h4>
+                  <span class="tech-chip chip-green">{item.tag}</span>
+                </div>
+                <p class="card-subtitle">{item.subtitle}</p>
+                <p class="card-desc">{item.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Aspecto Económico -->
+      <div class="pillar-box economic-pillar">
+        <header class="pillar-header">
+          <div class="pillar-title-group">
+            <span class="pillar-tag">TRACCIÓN & NEGOCIO</span>
+            <h3 class="pillar-title">aspecto economico</h3>
+          </div>
+          <span class="pillar-indicator economic-indicator">💼 SaaS & B2B</span>
+        </header>
+
+        <div class="projects-stack">
+          {economicProjects.map((item) => (
+            <div class="project-mini-card economic-card">
+              <div class="card-icon">{item.icon}</div>
+              <div class="card-details">
+                <div class="card-meta">
+                  <h4 class="card-name">{item.name}</h4>
+                  <span class="tech-chip chip-orange">{item.tag}</span>
+                </div>
+                <p class="card-subtitle">{item.subtitle}</p>
+                <p class="card-desc">{item.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ecosystem {
+    padding: var(--spacing-xl) 0;
+    position: relative;
+    background: var(--ink);
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .badge-wrapper {
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 0.35rem 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--electric);
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    border-radius: 9999px;
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 4vw, 2.85rem);
+    line-height: 1.2;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .text-gradient {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--electric) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .section-subtitle {
+    max-width: 720px;
+    margin: 0 auto;
+    font-size: 1.05rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* Pillars Grid */
+  .pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3.5rem;
+  }
+
+  .pillar-box {
+    background: var(--panel);
+    border-radius: 16px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .social-pillar {
+    border: 1px solid rgba(52, 211, 153, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(52, 211, 153, 0.15);
+  }
+
+  .economic-pillar {
+    border: 1px solid rgba(249, 115, 22, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(249, 115, 22, 0.15);
+  }
+
+  .pillar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .pillar-tag {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .pillar-title {
+    font-family: var(--font-mono);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0.25rem 0 0;
+  }
+
+  .social-pillar .pillar-title {
+    color: var(--green);
+  }
+
+  .economic-pillar .pillar-title {
+    color: var(--accent);
+  }
+
+  .pillar-indicator {
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.3rem 0.75rem;
+    border-radius: 20px;
+  }
+
+  .social-indicator {
+    background: rgba(52, 211, 153, 0.15);
+    color: var(--green);
+    border: 1px solid rgba(52, 211, 153, 0.3);
+  }
+
+  .economic-indicator {
+    background: rgba(249, 115, 22, 0.15);
+    color: var(--accent);
+    border: 1px solid rgba(249, 115, 22, 0.3);
+  }
+
+  /* Projects Stack */
+  .projects-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .project-mini-card {
+    background: var(--deep);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    display: flex;
+    gap: 1rem;
+    transition: transform 0.25s ease, border-color 0.25s ease;
+  }
+
+  .project-mini-card:hover {
+    transform: translateX(4px);
+  }
+
+  .social-card:hover {
+    border-color: rgba(52, 211, 153, 0.5);
+  }
+
+  .economic-card:hover {
+    border-color: rgba(249, 115, 22, 0.5);
+  }
+
+  .card-icon {
+    font-size: 1.8rem;
+    min-width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--panel);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .card-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .card-name {
+    font-family: var(--font-mono);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--white);
+    margin: 0;
+  }
+
+  .tech-chip {
+    font-size: 0.68rem;
+    font-weight: 600;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+  }
+
+  .chip-green {
+    background: rgba(52, 211, 153, 0.15);
+    color: var(--green);
+  }
+
+  .chip-orange {
+    background: rgba(249, 115, 22, 0.15);
+    color: var(--accent2);
+  }
+
+  .card-subtitle {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--electric);
+    margin: 0;
+  }
+
+  .card-desc {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--text);
+    margin: 0.2rem 0 0;
+  }
+
+  @media (max-width: 768px) {
+    .pillars-grid {
+      grid-template-columns: 1fr;
+    }
+    .pillar-box {
+      padding: 1.5rem;
+    }
+  }
+</style>

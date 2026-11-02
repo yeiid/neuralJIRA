@@ -1,0 +1,139 @@
+---
+// AboutUs.astro — Quiénes Somos / Manifiesto NeuralJIRA
+---
+
+<section id="quienes-somos" class="section about-us">
+  <div class="container">
+    <div class="badge-wrapper">
+      <span class="badge">NUESTRO MANIFIESTO</span>
+    </div>
+
+    <h2 class="section-title">
+      Tecnología con Propósito: <br />
+      <span class="text-gradient">Del Servidor al Territorio</span>
+    </h2>
+
+    <p class="manifesto-lead">
+      NeuralJIRA es una startup colombiana de ingeniería de software, arquitectura de sistemas y automatización con IA, con sede en Bogotá y raíces en La Guajira. Creemos que la innovación tecnológica de vanguardia no debe quedarse encerrada en las grandes capitales: debe solucionar problemas reales de negocios y abrir oportunidades donde más se necesitan.
+    </p>
+
+    <div class="values-grid">
+      <div class="value-card">
+        <div class="value-icon">⚖️</div>
+        <h3 class="value-title">Modelo de Impacto Dual</h3>
+        <p class="value-desc">
+          Nuestras soluciones B2B y productos SaaS generan tracción económica y rentabilidad. Ese mismo músculo técnico financia y despliega proyectos sociales, plataformas educativas y herramientas ambientales en comunidades que históricamente han estado desconectadas.
+        </p>
+      </div>
+
+      <div class="value-card">
+        <div class="value-icon">⚡</div>
+        <h3 class="value-title">Soberanía Tecnológica & Edge</h3>
+        <p class="value-desc">
+          No dependemos de infraestructuras costosas. Diseñamos sistemas <strong>local-first</strong>, arquitectura resiliente y clusters de inferencia de IA en hardware accesible (Linux + Android Termux), demostrando que la alta tecnología puede operar en cualquier rincón del país.
+        </p>
+      </div>
+
+      <div class="value-card">
+        <div class="value-icon">🌱</div>
+        <h3 class="value-title">Compromiso con el Territorio</h3>
+        <p class="value-desc">
+          Aprovechamos los Centros Digitales y la infraestructura instalada en La Guajira para formar a jóvenes en programación, digitalizar oficios tradicionales y proteger la biodiversidad mediante datos abiertos y geolocalización.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about-us {
+    position: relative;
+    padding: var(--spacing-xl) 0;
+    background: linear-gradient(180deg, var(--ink) 0%, var(--deep) 100%);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .badge-wrapper {
+    text-align: center;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 0.35rem 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    background: rgba(249, 115, 22, 0.1);
+    border: 1px solid rgba(249, 115, 22, 0.3);
+    border-radius: 9999px;
+  }
+
+  .section-title {
+    text-align: center;
+    font-size: clamp(2rem, 4vw, 2.85rem);
+    line-height: 1.2;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .text-gradient {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--electric) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .manifesto-lead {
+    max-width: 820px;
+    margin: 0 auto var(--spacing-xl);
+    text-align: center;
+    font-size: 1.15rem;
+    line-height: 1.8;
+    color: var(--text);
+  }
+
+  .values-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-lg);
+  }
+
+  .value-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .value-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(56, 189, 248, 0.4);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3), 0 0 16px rgba(56, 189, 248, 0.1);
+  }
+
+  .value-icon {
+    font-size: 2.2rem;
+    margin-bottom: 1rem;
+  }
+
+  .value-title {
+    font-size: 1.25rem;
+    color: var(--white);
+    margin-bottom: 0.75rem;
+    font-weight: 700;
+  }
+
+  .value-desc {
+    font-size: 0.95rem;
+    line-height: 1.65;
+    color: var(--text);
+    margin: 0;
+  }
+
+  .value-desc strong {
+    color: var(--electric);
+  }
+</style>
