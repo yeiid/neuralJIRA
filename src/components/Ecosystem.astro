@@ -40,37 +40,48 @@ const socialProjects = [
 
 const economicProjects = [
   {
-    name: "transpoSYS",
-    subtitle: "Logística y Transporte",
-    desc: "Software de gestión de despachos, control de rutas, liquidación y monitoreo para flotas de transporte terrestre.",
-    icon: "🚐",
-    tag: "B2B / Operaciones"
-  },
-  {
-    name: "gymtrack",
-    subtitle: "SaaS Fitness & Go Server",
-    desc: "Gestión de clientes y accesos para gimnasios con backend en Go v1.24 y firmas criptográficas Ed25519 offline.",
-    icon: "🏋️",
-    tag: "SaaS Recurrente"
+    name: "CactusNet (Catupnet)",
+    subtitle: "Plataforma ISP & Telecomunicaciones",
+    desc: "Sitio web para operador de fibra óptica con sistema trilingüe (Wayuunaiki, Español, Inglés), mapa de cobertura MapLibre GL y captación por WhatsApp.",
+    icon: "🌵",
+    tag: "Cliente Real · ISP",
+    link: "https://cactusnet.com.co"
   },
   {
     name: "inventerSYS (ADN)",
     subtitle: "SaaS Multi-Tenant 3D",
-    desc: "Gestión de bodegas en tiempo real con gemelo digital 3D y app PWA para eventos de alta concurrencia (Central Cervecera).",
+    desc: "Gestión de bodegas en tiempo real con gemelo digital 3D interactivo y app PWA para eventos de alta concurrencia (Central Cervecera).",
     icon: "🧬",
-    tag: "Enterprise SaaS"
+    tag: "Enterprise SaaS",
+    link: "https://web.neuraljira.tech/"
+  },
+  {
+    name: "gymtrack",
+    subtitle: "SaaS Fitness & Go Server",
+    desc: "Gestión de clientes y membresías para gimnasios con backend en Go v1.24 y firmas criptográficas Ed25519 offline.",
+    icon: "🏋️",
+    tag: "SaaS Recurrente",
+    link: "https://demo-html-five.vercel.app/"
+  },
+  {
+    name: "transpoSYS / JVSD POS",
+    subtitle: "Logística y Gastronomía Local-First",
+    desc: "Sistemas para flotas y restaurantes de alta concurrencia. Comandas QR en mesa, pantalla de cocina KDS y tolerancia total a cortes de red.",
+    icon: "🍽️",
+    tag: "B2B / Local-First"
   },
   {
     name: "ecommers",
     subtitle: "Motores E-commerce",
-    desc: "Plataformas de venta online de alto rendimiento con sincronización automática de stock y cobro por pasarelas locales.",
+    desc: "Plataformas de venta online de alto rendimiento con sincronización automática de stock y pasarelas de pago locales.",
     icon: "🛍️",
-    tag: "Comercio Digital"
+    tag: "Comercio Digital",
+    link: "https://jamuchee.vercel.app/"
   },
   {
     name: "monitoreo FTTH",
     subtitle: "Infraestructura de Red",
-    desc: "Monitoreo y diagnóstico del estado de puertos y enlaces de fibra óptica para operadores y redes comunitarias.",
+    desc: "Monitoreo y diagnóstico del estado de puertos y enlaces de fibra óptica para operadores regionales y redes comunitarias.",
     icon: "🌐",
     tag: "Telecomunicaciones"
   }
@@ -98,7 +109,7 @@ const economicProjects = [
         <header class="pillar-header">
           <div class="pillar-title-group">
             <span class="pillar-tag">IMPACTO & SOBERANÍA</span>
-            <h3 class="pillar-title">aspecto social</h3>
+            <h3 class="pillar-title">Aspecto Social</h3>
           </div>
           <span class="pillar-indicator social-indicator">🌱 Tech for Good</span>
         </header>
@@ -125,7 +136,7 @@ const economicProjects = [
         <header class="pillar-header">
           <div class="pillar-title-group">
             <span class="pillar-tag">TRACCIÓN & NEGOCIO</span>
-            <h3 class="pillar-title">aspecto economico</h3>
+            <h3 class="pillar-title">Aspecto Económico</h3>
           </div>
           <span class="pillar-indicator economic-indicator">💼 SaaS & B2B</span>
         </header>
@@ -141,6 +152,16 @@ const economicProjects = [
                 </div>
                 <p class="card-subtitle">{item.subtitle}</p>
                 <p class="card-desc">{item.desc}</p>
+                {item.link && (
+                  <a
+                    href={item.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="project-card-link"
+                  >
+                    Ver en vivo <span>↗</span>
+                  </a>
+                )}
               </div>
             </div>
           ))}
@@ -371,6 +392,25 @@ const economicProjects = [
     line-height: 1.5;
     color: var(--text);
     margin: 0.2rem 0 0;
+  }
+
+  .project-card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s, gap 0.2s;
+    width: fit-content;
+  }
+
+  .project-card-link:hover {
+    color: var(--accent2);
+    gap: 0.55rem;
   }
 
   @media (max-width: 768px) {
