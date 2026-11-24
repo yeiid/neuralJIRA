@@ -2,7 +2,7 @@ export const SITE = {
   name: 'NeuralJIRA',
   domain: 'neuraljira.tech',
   url: 'https://neuraljira.tech',
-  email: 'contacto@neuraljira.tech',
+  email: 'yeifran67@gmail.com',
   whatsappNumber: '573058079573',
   portfolioUrl: 'https://portfolio.neuraljira.tech',
   founder: 'Yeifran Hernández',
