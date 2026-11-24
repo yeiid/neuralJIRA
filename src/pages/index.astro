@@ -1,29 +1,25 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import Header from "../components/Header.astro";
-import Hero from "../components/Hero.astro";
-import Clients from "../components/Clients.astro";
-import AboutUs from "../components/AboutUs.astro";
-import Ecosystem from "../components/Ecosystem.astro";
-import Services from "../components/Services.astro";
-import Pricing from "../components/Pricing.astro";
-import Contact from "../components/Contact.astro";
-import Footer from "../components/Footer.astro";
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Services from '../components/Services.astro';
+import ProjectsSlider from '../components/ProjectsSlider.astro';
+import SocialProjects from '../components/SocialProjects.astro';
+import AboutImpact from '../components/AboutImpact.astro';
+import Contact from '../components/Contact.astro';
+import Footer from '../components/Footer.astro';
+import { SITE } from '../config/site';
 ---
 
-<Layout
-	title="NeuralJIRA | Tecnología con Propósito · Startup & AI Studio"
-	description="Desarrollo web de alto rendimiento, automatización con IA y software local-first para negocios en Colombia. Conoce nuestros planes y arquitectura."
->
-	<Header />
-	<main>
-		<Hero />
-		<Clients />
-		<AboutUs />
-		<Ecosystem />
-		<Services />
-		<Pricing />
-		<Contact />
-	</main>
-	<Footer />
+<Layout title={SITE.defaultTitle} description={SITE.defaultDescription}>
+  <Header />
+  <main>
+    <Hero />
+    <Services />
+    <ProjectsSlider />
+    <SocialProjects />
+    <AboutImpact />
+    <Contact />
+  </main>
+  <Footer />
 </Layout>

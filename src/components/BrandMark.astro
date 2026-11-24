@@ -1,0 +1,121 @@
+---
+interface Props {
+  size?: number;
+}
+const { size = 28 } = Astro.props;
+---
+
+<span class="brand-mark" aria-hidden="true">
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 36 36"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    class="brand-mark__svg"
+  >
+    <rect x="0.75" y="0.75" width="34.5" height="34.5" rx="8.5" class="brand-mark__bg" />
+    <path
+      d="M10.5 26V10.5L25.5 25.5V10"
+      class="brand-mark__stroke"
+      stroke-width="2.3"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M10.5 18H18L25.5 10"
+      class="brand-mark__accent-line"
+      stroke-width="1.65"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <circle cx="10.5" cy="10.5" r="2.2" class="brand-mark__node-accent" />
+    <circle cx="25.5" cy="25.5" r="2.2" class="brand-mark__node-accent" />
+    <circle cx="25.5" cy="10" r="1.9" class="brand-mark__node-electric" />
+    <circle cx="10.5" cy="26" r="1.7" class="brand-mark__node-base" />
+  </svg>
+  <!-- Ultra-subtle seasonal badge dot (pure CSS visibility per data-season) -->
+  <span class="brand-mark__season-pip">
+    <svg viewBox="0 0 12 12" width="10" height="10" fill="currentColor" class="pip-star">
+      <path d="M6 0.8L7.3 4.7L11.2 6L7.3 7.3L6 11.2L4.7 7.3L0.8 6L4.7 4.7L6 0.8Z" />
+    </svg>
+    <svg viewBox="0 0 12 12" width="10" height="10" fill="currentColor" class="pip-crescent">
+      <path d="M9.6 7.9A4.4 4.4 0 0 1 4.1 2.4a4.5 4.5 0 1 0 5.5 5.5Z" />
+    </svg>
+  </span>
+</span>
+
+<style>
+  .brand-mark {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .brand-mark__bg {
+    fill: #0b0f1a;
+    stroke: var(--border-subtle);
+    stroke-width: 1.25;
+  }
+
+  .brand-mark__stroke {
+    stroke: #f8fafc;
+  }
+
+  .brand-mark__accent-line {
+    stroke: #f97316;
+  }
+
+  .brand-mark__node-accent {
+    fill: #f97316;
+  }
+
+  .brand-mark__node-electric {
+    fill: #38bdf8;
+  }
+
+  .brand-mark__node-base {
+    fill: #f8fafc;
+  }
+
+  .brand-mark__season-pip {
+    display: none;
+    position: absolute;
+    inset-block-start: -4px;
+    inset-inline-end: -4px;
+    inline-size: 14px;
+    block-size: 14px;
+    border-radius: 50%;
+    background: var(--season-accent);
+    color: var(--season-on-accent);
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 0 2px var(--surface-canvas);
+  }
+
+  .brand-mark__season-pip svg {
+    display: none;
+  }
+
+  :global(:root[data-season="christmas"]) .brand-mark__season-pip,
+  :global(:root[data-season="new-year"]) .brand-mark__season-pip,
+  :global(:root[data-season="black-friday"]) .brand-mark__season-pip {
+    display: inline-flex;
+  }
+
+  :global(:root[data-season="christmas"]) .pip-star,
+  :global(:root[data-season="new-year"]) .pip-star,
+  :global(:root[data-season="black-friday"]) .pip-star {
+    display: block;
+  }
+
+  :global(:root[data-season="halloween"]) .brand-mark__season-pip {
+    display: inline-flex;
+  }
+
+  :global(:root[data-season="halloween"]) .pip-crescent {
+    display: block;
+  }
+</style>

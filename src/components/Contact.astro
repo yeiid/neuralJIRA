@@ -1,212 +1,478 @@
 ---
+import Icon from './Icon.astro';
+import { SITE, waUrl } from '../config/site';
 
+const emailjsConfig = {
+  serviceId: import.meta.env.PUBLIC_EMAILJS_SERVICE_ID ?? 'neuraljira',
+  templateId: import.meta.env.PUBLIC_EMAILJS_TEMPLATE_ID ?? 'template_axw8cco',
+  publicKey: import.meta.env.PUBLIC_EMAILJS_PUBLIC_KEY ?? 'RI4svDyx_om5FK-bF',
+};
+
+const serviceOptions = [
+  'Landing Pages & Sitios Web',
+  'Tiendas Online & Catálogos',
+  'Bots de WhatsApp con IA',
+  'Software a Medida & Local-First',
+  'Iniciativa Social / Alianza',
+  'Otro proyecto',
+];
 ---
 
-<section id="contacto" class="section contact">
-    <div class="container">
-        <div class="contact-wrapper">
-            <div class="contact-info">
-                <h2 class="section-title">Hablemos de tu proyecto</h2>
-                <p>
-                    ¿Listo para escalar tu negocio? Cuéntanos tus desafíos y te
-                    ayudaremos a encontrar la solución tecnológica adecuada.
-                </p>
-                <div class="info-item">
-                    <strong>Email:</strong> <a href="mailto:contacto@neuraljira.tech" style="color: var(--accent); text-decoration: none;">contacto@neuraljira.tech</a>
-                </div>
+<section id="contacto" class="section contact-section">
+  <div class="container contact-grid">
+    <!-- Left Column: Commercial Steps & Direct Channels -->
+    <div class="contact-info">
+      <p class="eyebrow">Hablemos de tu Proyecto</p>
+      <h2>Agenda un diagnóstico técnico gratuito en menos de 24 horas.</h2>
+      <p class="contact-lead">
+        Cuéntanos qué necesitas construir o automatizar. Evaluamos tu caso directamente con
+        ingeniería y te enviamos una propuesta a la medida por escrito.
+      </p>
 
-                <a
-                    href="https://wa.me/573058079573"
-                    target="_blank"
-                    class="btn btn-whatsapp"
-                >
-                    <span class="icon">📱</span> Contactar por WhatsApp
-                </a>
-            </div>
+      <ol class="process-steps" role="list">
+        <li>
+          <span class="step-num font-mono">01</span>
+          <div>
+            <strong>Diagnóstico gratuito (15 min)</strong>
+            <p>Entendemos tu modelo de negocio, tiempos y prioridades comerciales.</p>
+          </div>
+        </li>
+        <li>
+          <span class="step-num font-mono">02</span>
+          <div>
+            <strong>Propuesta y cronograma a medida</strong>
+            <p>Alcance claro por escrito, fechas de entrega y propiedad intelectual 100% tuya.</p>
+          </div>
+        </li>
+        <li>
+          <span class="step-num font-mono">03</span>
+          <div>
+            <strong>Despliegue y garantía de 30 días</strong>
+            <p>Publicación con acompañamiento directo y facturación electrónica DIAN.</p>
+          </div>
+        </li>
+      </ol>
 
-            <form class="contact-form" id="contact-form">
-                <div class="form-group">
-                    <label for="name">Nombre</label>
-                    <input
-                        type="text"
-                        id="name"
-                        name="user_name"
-                        required
-                        placeholder="Tu nombre o empresa"
-                    />
-                </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input
-                        type="email"
-                        id="email"
-                        name="user_email"
-                        required
-                        placeholder="contacto@neuraljira.tech"
-                    />
-                </div>
-                <div class="form-group">
-                    <label for="message">Mensaje</label>
-                    <textarea
-                        id="message"
-                        name="message"
-                        rows="4"
-                        required
-                        placeholder="¿En qué podemos ayudarte?"></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary" id="submit-btn"
-                    >Enviar Mensaje</button
-                >
-                <p id="form-status" class="form-status"></p>
-            </form>
-        </div>
+      <div class="direct-channels">
+        <a
+          href={waUrl('Hola NeuralJIRA, quiero agendar un diagnóstico técnico gratuito para mi proyecto.')}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn btn-primary"
+        >
+          <Icon name="whatsapp" size={17} />
+          <span>Escribir por WhatsApp</span>
+        </a>
+        <a href={`mailto:${SITE.email}`} class="btn btn-secondary">
+          <Icon name="mail" size={16} />
+          <span>{SITE.email}</span>
+        </a>
+      </div>
     </div>
+
+    <!-- Right Column: Accessible Contact Form -->
+    <form
+      class="surface-card contact-form"
+      id="contact-form"
+      method="POST"
+      aria-labelledby="contact-form-heading"
+      data-emailjs={JSON.stringify(emailjsConfig)}
+      novalidate
+    >
+      <h3 id="contact-form-heading" class="contact-form__title">Solicitar propuesta o demo</h3>
+
+      <!-- Accessible Honeypot Anti-Spam Field (hidden from assistive tech and tab order) -->
+      <div class="hp-field" aria-hidden="true">
+        <label for="website_url">Sitio web</label>
+        <input type="text" id="website_url" name="website_url" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <div class="form-field">
+        <label for="name">Nombre o empresa <span class="req" aria-hidden="true">*</span></label>
+        <input
+          type="text"
+          id="name"
+          name="user_name"
+          required
+          minlength="2"
+          maxlength="120"
+          autocomplete="name"
+          enterkeyhint="next"
+          placeholder="Ej. María Gómez — Distribuidora Norte"
+        />
+        <span class="field-error" id="name-error" hidden>Ingresa tu nombre o el de tu empresa.</span>
+      </div>
+
+      <div class="form-field">
+        <label for="email">Correo electrónico <span class="req" aria-hidden="true">*</span></label>
+        <input
+          type="email"
+          id="email"
+          name="user_email"
+          required
+          maxlength="160"
+          autocomplete="email"
+          autocorrect="off"
+          autocapitalize="none"
+          spellcheck="false"
+          enterkeyhint="next"
+          placeholder="tu-correo@empresa.com"
+        />
+        <span class="field-error" id="email-error" hidden>Ingresa un correo electrónico válido.</span>
+      </div>
+
+      <div class="form-field">
+        <label for="contact-service">¿Qué necesitas construir o mejorar?</label>
+        <select id="contact-service" name="service_interest">
+          {serviceOptions.map((opt) => (
+            <option value={opt}>{opt}</option>
+          ))}
+        </select>
+      </div>
+
+      <div class="form-field">
+        <label for="message">Cuéntanos sobre tu proyecto <span class="req" aria-hidden="true">*</span></label>
+        <textarea
+          id="message"
+          name="message"
+          rows="4"
+          required
+          minlength="10"
+          maxlength="2000"
+          enterkeyhint="send"
+          placeholder="Describe brevemente tu negocio, objetivo y plazo deseado…"
+        ></textarea>
+        <span class="field-error" id="message-error" hidden>Cuéntanos un poco más (mínimo 10 caracteres).</span>
+      </div>
+
+      <button type="submit" class="btn btn-primary contact-form__submit" id="submit-btn">
+        <Icon name="send" size={16} />
+        <span id="submit-btn-text">Enviar solicitud</span>
+      </button>
+
+      <p class="contact-form__legal">
+        Al enviar aceptas nuestra <a href="/privacidad">Política de Privacidad (Ley 1581)</a>. Sin spam.
+      </p>
+
+      <div
+        id="form-status"
+        class="form-status"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        hidden
+      ></div>
+    </form>
+  </div>
 </section>
 
 <script>
-    import emailjs from "@emailjs/browser";
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  const statusEl = document.getElementById('form-status');
+  const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement | null;
+  const submitText = document.getElementById('submit-btn-text');
 
-    const form = document.getElementById("contact-form") as HTMLFormElement;
-    const statusMsg = document.getElementById("form-status");
-    const submitBtn = document.getElementById(
-        "submit-btn",
-    ) as HTMLButtonElement;
+  if (form) {
+    const fields: Array<{ input: HTMLInputElement | HTMLTextAreaElement; errId: string }> = [
+      { input: form.querySelector('#name') as HTMLInputElement, errId: 'name-error' },
+      { input: form.querySelector('#email') as HTMLInputElement, errId: 'email-error' },
+      { input: form.querySelector('#message') as HTMLTextAreaElement, errId: 'message-error' },
+    ];
 
-    if (form) {
-        form.addEventListener("submit", function (e) {
-            e.preventDefault();
-
-            if (submitBtn) submitBtn.disabled = true;
-            if (statusMsg) statusMsg.textContent = "Enviando...";
-
-            // REPLACE THESE WITH YOUR ACTUAL EMAILJS CREDENTIALS
-            const SERVICE_ID = "neuraljira";
-            const TEMPLATE_ID = "template_axw8cco";
-            const PUBLIC_KEY = "RI4svDyx_om5FK-bF";
-
-            emailjs
-                .sendForm(SERVICE_ID, TEMPLATE_ID, this, PUBLIC_KEY)
-                .then(
-                    () => {
-                        if (statusMsg) {
-                            statusMsg.textContent =
-                                "¡Mensaje enviado con éxito!";
-                            statusMsg.style.color = "#4ade80"; // Green
-                        }
-                        form.reset();
-                    },
-                    (error) => {
-                        console.error("FAILED...", error);
-                        if (statusMsg) {
-                            statusMsg.textContent =
-                                "Error al enviar. Por favor intenta de nuevo.";
-                            statusMsg.style.color = "#f87171"; // Red
-                        }
-                    },
-                )
-                .finally(() => {
-                    if (submitBtn) submitBtn.disabled = false;
-                });
-        });
+    function validateField(input: HTMLInputElement | HTMLTextAreaElement, errId: string): boolean {
+      const errEl = document.getElementById(errId);
+      const valid = input.checkValidity();
+      input.setAttribute('aria-invalid', String(!valid));
+      if (errEl) {
+        errEl.hidden = valid;
+        if (!valid) {
+          input.setAttribute('aria-describedby', errId);
+        } else {
+          input.removeAttribute('aria-describedby');
+        }
+      }
+      return valid;
     }
+
+    // Validate on blur (contextual) and clear errors on input once fixed
+    fields.forEach(({ input, errId }) => {
+      if (!input) return;
+      input.addEventListener('blur', () => {
+        if (input.value.trim().length > 0) {
+          validateField(input, errId);
+        }
+      });
+      input.addEventListener('input', () => {
+        if (input.getAttribute('aria-invalid') === 'true' && input.checkValidity()) {
+          validateField(input, errId);
+        }
+      });
+    });
+
+    function showStatus(kind: 'info' | 'success' | 'error', text: string) {
+      if (!statusEl) return;
+      statusEl.hidden = false;
+      statusEl.dataset.kind = kind;
+      const prefix = kind === 'success' ? 'Confirmado: ' : kind === 'error' ? 'Aviso: ' : '';
+      statusEl.textContent = `${prefix}${text}`;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // Silent bot trap via honeypot
+      const hp = form.querySelector<HTMLInputElement>('#website_url');
+      if (hp && hp.value.trim() !== '') {
+        showStatus('success', '¡Solicitud recibida! Te responderemos pronto.');
+        form.reset();
+        return;
+      }
+
+      // Validate all fields and route focus to first invalid field
+      let firstInvalid: HTMLInputElement | HTMLTextAreaElement | null = null;
+      for (const { input, errId } of fields) {
+        if (!input) continue;
+        const ok = validateField(input, errId);
+        if (!ok && !firstInvalid) firstInvalid = input;
+      }
+
+      if (firstInvalid) {
+        firstInvalid.focus();
+        showStatus('error', 'Revisa los campos marcados antes de enviar.');
+        return;
+      }
+
+      if (submitBtn) submitBtn.disabled = true;
+      if (submitText) submitText.textContent = 'Enviando solicitud…';
+      showStatus('info', 'Enviando tu mensaje de forma segura…');
+
+      try {
+        const cfg = JSON.parse(form.dataset.emailjs ?? '{}');
+        // Dynamic import keeps @emailjs/browser out of initial critical JS bundle
+        const { default: emailjs } = await import('@emailjs/browser');
+        await emailjs.sendForm(cfg.serviceId, cfg.templateId, form, cfg.publicKey);
+        showStatus('success', '¡Mensaje enviado! Te responderemos en menos de 24 horas hábiles.');
+        form.reset();
+        fields.forEach(({ input }) => input?.removeAttribute('aria-invalid'));
+      } catch (err) {
+        console.error('EmailJS submission error:', err);
+        showStatus(
+          'error',
+          'No pudimos enviar el formulario en este momento. Puedes escribirnos directo por WhatsApp o a contacto@neuraljira.tech.',
+        );
+      } finally {
+        if (submitBtn) submitBtn.disabled = false;
+        if (submitText) submitText.textContent = 'Enviar solicitud';
+      }
+    });
+  }
 </script>
 
 <style>
-    .contact {
-        background: linear-gradient(
-            to bottom,
-            var(--color-bg),
-            var(--color-bg-secondary)
-        );
-    }
+  .contact-section {
+    border-block-start: 1px solid var(--border-subtle);
+  }
 
-    .contact-wrapper {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: var(--spacing-xl);
-        align-items: start;
-    }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    gap: clamp(2rem, 1.5rem + 2.5vw, 4rem);
+    align-items: start;
+  }
 
-    @media (max-width: 768px) {
-        .contact-wrapper {
-            grid-template-columns: 1fr;
-        }
-    }
+  .contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
 
-    .contact-info h2 {
-        margin-bottom: var(--spacing-md);
-    }
+  .contact-lead {
+    font-size: 1.02rem;
+    line-height: 1.65;
+    max-inline-size: 56ch;
+  }
 
-    .contact-info p {
-        margin-bottom: var(--spacing-lg);
-        font-size: 1.1rem;
-    }
+  .process-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-block: 1rem;
+    border-block: 1px solid var(--border-subtle);
+  }
 
-    .info-item {
-        margin-bottom: var(--spacing-lg);
-    }
+  .process-steps li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.9rem;
+  }
 
-    .contact-form {
-        background: var(--color-bg);
-        padding: var(--spacing-lg);
-        border-radius: var(--radius-lg);
-        border: 1px solid var(--border-color);
-    }
+  .step-num {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--brand-accent);
+    background: var(--brand-accent-soft);
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+    flex-shrink: 0;
+  }
 
-    .form-group {
-        margin-bottom: var(--spacing-md);
-    }
+  .process-steps strong {
+    display: block;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    margin-block-end: 0.15rem;
+  }
 
-    .form-group label {
-        display: block;
-        margin-bottom: var(--spacing-sm);
-        font-weight: 500;
-        color: var(--color-text);
-    }
+  .process-steps p {
+    font-size: 0.86rem;
+    line-height: 1.5;
+  }
 
-    .form-group input,
-    .form-group textarea {
-        width: 100%;
-        padding: 0.75rem;
-        background: var(--color-bg-secondary);
-        border: 1px solid var(--border-color);
-        border-radius: var(--radius-sm);
-        color: var(--color-text);
-        font-family: inherit;
-        transition: border-color 0.2s;
-    }
+  .direct-channels {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
 
-    .form-group input:focus,
-    .form-group textarea:focus {
-        outline: none;
-        border-color: var(--color-primary);
-    }
+  /* Accessible Contact Form */
+  .contact-form {
+    padding: clamp(1.35rem, 1rem + 1.2vw, 2rem);
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem;
+  }
 
-    .btn {
-        width: 100%;
-    }
+  .contact-form__title {
+    font-size: 1.25rem;
+    padding-block-end: 0.85rem;
+    border-block-end: 1px solid var(--border-subtle);
+  }
 
-    .btn-whatsapp {
-        background-color: #25d366;
-        color: white;
-        margin-top: var(--spacing-md);
-        text-decoration: none;
-        font-weight: bold;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        width: fit-content;
-    }
+  .hp-field {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    pointer-events: none;
+  }
 
-    .btn-whatsapp:hover {
-        background-color: #128c7e;
-        transform: translateY(-1px);
-    }
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
 
-    .form-status {
-        margin-top: var(--spacing-md);
-        font-size: 0.9rem;
-        text-align: center;
-        min-height: 1.5em;
+  .form-field label {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .req {
+    color: var(--brand-accent);
+  }
+
+  .form-field input,
+  .form-field select,
+  .form-field textarea {
+    inline-size: 100%;
+    min-block-size: 3rem;
+    padding: 0.7rem 0.9rem;
+    font-size: max(1rem, 1em); /* Prevents iOS auto-zoom */
+    background: var(--surface-canvas);
+    color: var(--text-primary);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-md);
+    transition: border-color 150ms ease, background-color 150ms ease;
+  }
+
+  .form-field textarea {
+    min-block-size: 7.5rem;
+    resize: vertical;
+  }
+
+  .form-field input::placeholder,
+  .form-field textarea::placeholder {
+    color: var(--text-muted);
+    opacity: 0.85;
+  }
+
+  .form-field input:focus-visible,
+  .form-field select:focus-visible,
+  .form-field textarea:focus-visible {
+    outline: 2px solid var(--brand-accent);
+    outline-offset: 2px;
+    border-color: var(--brand-accent);
+  }
+
+  /* Post-interaction native validation feedback */
+  .form-field input:user-invalid,
+  .form-field textarea:user-invalid,
+  .form-field [aria-invalid="true"] {
+    border-color: var(--status-danger);
+  }
+
+  .field-error {
+    font-size: 0.8rem;
+    color: var(--status-danger);
+    font-weight: 500;
+  }
+
+  .field-error[hidden] {
+    display: none;
+  }
+
+  .contact-form__submit {
+    inline-size: 100%;
+    min-block-size: 3.1rem;
+  }
+
+  .contact-form__legal {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    text-align: center;
+  }
+
+  .contact-form__legal a {
+    color: var(--text-secondary);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .contact-form__legal a:hover {
+    color: var(--brand-accent);
+  }
+
+  .form-status {
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
+    font-size: 0.88rem;
+    font-weight: 500;
+    border: 1px solid var(--border-subtle);
+    background: var(--surface-subtle);
+    color: var(--text-primary);
+  }
+
+  .form-status[hidden] {
+    display: none;
+  }
+
+  .form-status[data-kind="success"] {
+    background: var(--status-success-soft);
+    border-color: color-mix(in oklab, var(--status-success) 35%, transparent);
+    color: var(--status-success);
+  }
+
+  .form-status[data-kind="error"] {
+    background: var(--status-danger-soft);
+    border-color: color-mix(in oklab, var(--status-danger) 35%, transparent);
+    color: var(--status-danger);
+  }
+
+  @media (max-width: 900px) {
+    .contact-grid {
+      grid-template-columns: 1fr;
     }
+  }
 </style>

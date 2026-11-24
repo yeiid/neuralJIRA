@@ -1,0 +1,317 @@
+---
+import Icon from '../Icon.astro';
+
+interface Props {
+  compact?: boolean;
+  uid?: string;
+}
+const { compact = false, uid = 'kds' } = Astro.props;
+---
+
+<div class:list={['kds-demo', { 'kds-demo--compact': compact }]} data-kds-widget={uid}>
+  <div class="kds-demo__bar">
+    <div class="kds-demo__net" data-kds-status-pill>
+      <span class="kds-demo__pulse" aria-hidden="true"></span>
+      <span class="font-mono" data-kds-net-text>Red LAN Local · 0 ms</span>
+    </div>
+
+    <button
+      type="button"
+      class="kds-demo__toggle font-mono"
+      data-kds-offline-toggle
+      aria-pressed="false"
+    >
+      <Icon name="wifi-off" size={13} />
+      <span data-kds-toggle-label>Simular corte internet</span>
+    </button>
+  </div>
+
+  <div class="kds-demo__banner" data-kds-offline-banner hidden aria-live="polite">
+    <strong>Internet caído:</strong> JVSD POS sigue sincronizando mesas y cocina en LAN local sin perder comandas.
+  </div>
+
+  <div class="kds-demo__tickets" data-kds-list>
+    <div class="kds-ticket" data-ticket-id="1">
+      <div class="kds-ticket__head">
+        <span class="font-mono kds-ticket__table">Mesa 04 · QR</span>
+        <span class="kds-ticket__time font-mono">02:14</span>
+      </div>
+      <ul class="kds-ticket__items" role="list">
+        <li>2× Pescado a la plancha</li>
+        <li>1× Limonada de coco</li>
+      </ul>
+      <button type="button" class="kds-ticket__btn" data-kds-complete>
+        Marcar listo en cocina
+      </button>
+    </div>
+
+    <div class="kds-ticket" data-ticket-id="2">
+      <div class="kds-ticket__head">
+        <span class="font-mono kds-ticket__table">Mesa 09 · Mesero</span>
+        <span class="kds-ticket__time font-mono">00:48</span>
+      </div>
+      <ul class="kds-ticket__items" role="list">
+        <li>1× Cazuela de mariscos</li>
+        <li>2× Jugo natural</li>
+      </ul>
+      <button type="button" class="kds-ticket__btn" data-kds-complete>
+        Marcar listo en cocina
+      </button>
+    </div>
+  </div>
+
+  <div class="kds-demo__foot">
+    <span class="font-mono kds-demo__counter" data-kds-counter>Fastify + SQLite WAL · 2 activas</span>
+    <button type="button" class="kds-demo__add font-mono" data-kds-add>
+      + Enviar comanda QR
+    </button>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-kds-widget]').forEach((root) => {
+    const toggleBtn = root.querySelector<HTMLButtonElement>('[data-kds-offline-toggle]');
+    const toggleLabel = root.querySelector('[data-kds-toggle-label]');
+    const netText = root.querySelector('[data-kds-net-text]');
+    const banner = root.querySelector<HTMLElement>('[data-kds-offline-banner]');
+    const list = root.querySelector<HTMLElement>('[data-kds-list]');
+    const addBtn = root.querySelector<HTMLButtonElement>('[data-kds-add]');
+    const counter = root.querySelector('[data-kds-counter]');
+
+    let offline = false;
+    let seq = 12;
+
+    const sampleOrders = [
+      ['1× Arroz de camarón', '2× Agua con gas'],
+      ['2× Burger artesanal', '1× Papas rústicas'],
+      ['1× Ceviche mixto', '1× Patacones con hogao'],
+    ];
+
+    function updateCounter() {
+      if (!list || !counter) return;
+      const pending = list.querySelectorAll('.kds-ticket:not(.is-done)').length;
+      const modeLabel = offline ? 'WAL Offline OK' : 'Fastify + SQLite WAL';
+      counter.textContent = `${modeLabel} · ${pending} ${pending === 1 ? 'activa' : 'activas'}`;
+    }
+
+    function bindComplete(btn: HTMLButtonElement) {
+      btn.addEventListener('click', () => {
+        const card = btn.closest('.kds-ticket');
+        if (!card) return;
+        const done = card.classList.toggle('is-done');
+        btn.textContent = done ? '✓ Servido (Reabrir)' : 'Marcar listo en cocina';
+        updateCounter();
+      });
+    }
+
+    root.querySelectorAll<HTMLButtonElement>('[data-kds-complete]').forEach(bindComplete);
+
+    toggleBtn?.addEventListener('click', () => {
+      offline = !offline;
+      toggleBtn.setAttribute('aria-pressed', String(offline));
+      root.classList.toggle('is-offline', offline);
+      if (toggleLabel) toggleLabel.textContent = offline ? 'Restaurar internet' : 'Simular corte internet';
+      if (netText) netText.textContent = offline ? 'Sin Internet · LAN 0 ms' : 'Red LAN Local · 0 ms';
+      if (banner) banner.hidden = !offline;
+      updateCounter();
+    });
+
+    addBtn?.addEventListener('click', () => {
+      if (!list) return;
+      seq += 1;
+      const items = sampleOrders[seq % sampleOrders.length];
+      const card = document.createElement('div');
+      card.className = 'kds-ticket';
+      card.innerHTML = `
+        <div class="kds-ticket__head">
+          <span class="font-mono kds-ticket__table">Mesa ${seq} · QR</span>
+          <span class="kds-ticket__time font-mono">00:01</span>
+        </div>
+        <ul class="kds-ticket__items" role="list">
+          ${items.map((i) => `<li>${i}</li>`).join('')}
+        </ul>
+        <button type="button" class="kds-ticket__btn" data-kds-complete>Marcar listo en cocina</button>
+      `;
+      if (list.children.length >= 3) {
+        const doneEl = list.querySelector('.kds-ticket.is-done') ?? list.lastElementChild;
+        doneEl?.remove();
+      }
+      list.prepend(card);
+      const btn = card.querySelector<HTMLButtonElement>('[data-kds-complete]');
+      if (btn) bindComplete(btn);
+      updateCounter();
+    });
+  });
+</script>
+
+<style>
+  .kds-demo {
+    background: var(--surface-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    block-size: 100%;
+  }
+
+  .kds-demo__bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.6rem 0.9rem;
+    background: var(--surface-subtle);
+    border-block-end: 1px solid var(--border-subtle);
+    font-size: 0.74rem;
+  }
+
+  .kds-demo__net {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-weight: 600;
+    color: var(--status-success);
+  }
+
+  .kds-demo__pulse {
+    inline-size: 8px;
+    block-size: 8px;
+    border-radius: 50%;
+    background: var(--status-success);
+  }
+
+  .kds-demo__toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 0.28rem 0.6rem;
+    min-block-size: 1.9rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-strong);
+    background: var(--surface-elevated);
+    color: var(--text-primary);
+    transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease;
+  }
+
+  .kds-demo.is-offline .kds-demo__toggle {
+    background: var(--brand-accent);
+    color: var(--brand-on-accent);
+    border-color: var(--brand-accent);
+  }
+
+  .kds-demo__banner {
+    background: var(--status-success-soft);
+    color: var(--status-success);
+    font-size: 0.78rem;
+    padding: 0.5rem 0.9rem;
+    border-block-end: 1px solid color-mix(in oklab, var(--status-success) 25%, transparent);
+  }
+
+  .kds-demo__banner[hidden] {
+    display: none;
+  }
+
+  .kds-demo__tickets {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.75rem;
+    padding: 0.9rem;
+    flex: 1;
+    align-content: start;
+  }
+
+  .kds-demo :global(.kds-ticket) {
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    transition: opacity 180ms ease, border-color 180ms ease;
+  }
+
+  .kds-demo :global(.kds-ticket.is-done) {
+    opacity: 0.65;
+    border-color: color-mix(in oklab, var(--status-success) 45%, transparent);
+  }
+
+  .kds-demo :global(.kds-ticket__head) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .kds-demo :global(.kds-ticket__time) {
+    color: var(--brand-accent);
+  }
+
+  .kds-demo :global(.kds-ticket__items) {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    flex: 1;
+  }
+
+  .kds-demo :global(.kds-ticket__btn) {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.42rem 0.65rem;
+    min-block-size: 2rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-strong);
+    background: var(--surface-elevated);
+    color: var(--text-primary);
+    transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+  }
+
+  .kds-demo :global(.kds-ticket__btn:hover) {
+    border-color: var(--brand-accent);
+    color: var(--brand-accent);
+  }
+
+  .kds-demo :global(.kds-ticket.is-done .kds-ticket__btn) {
+    background: var(--status-success-soft);
+    color: var(--status-success);
+    border-color: transparent;
+  }
+
+  .kds-demo__foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.6rem 0.9rem;
+    border-block-start: 1px solid var(--border-subtle);
+    background: var(--surface-subtle);
+    font-size: 0.74rem;
+  }
+
+  .kds-demo__counter {
+    color: var(--text-muted);
+  }
+
+  .kds-demo__add {
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: var(--brand-accent);
+    padding: 0.25rem 0.55rem;
+    border-radius: var(--radius-sm);
+    background: var(--brand-accent-soft);
+  }
+
+  .kds-demo__add:hover {
+    background: var(--brand-accent);
+    color: var(--brand-on-accent);
+  }
+</style>

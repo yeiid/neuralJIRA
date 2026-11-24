@@ -1,0 +1,49 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Icon from '../components/Icon.astro';
+import { SITE } from '../config/site';
+---
+
+<Layout
+  title={`Página no encontrada (404) | ${SITE.name}`}
+  description="La ruta solicitada no existe en neuraljira.tech."
+  noindex={true}
+>
+  <Header />
+  <main class="section not-found">
+    <div class="container not-found__inner">
+      <p class="eyebrow">Error 404</p>
+      <h1 id="contenido-principal" tabindex="-1">No encontramos esta página.</h1>
+      <p class="section-lead">
+        El enlace puede haber cambiado o estar mal escrito. Puedes regresar al inicio o explorar
+        directamente nuestras pruebas de productos.
+      </p>
+      <div class="not-found__actions">
+        <a href="/" class="btn btn-primary">
+          <span>Volver al inicio</span>
+          <Icon name="arrow-right" size={16} />
+        </a>
+        <a href="/#proyectos" class="btn btn-secondary">
+          <span>Ver proyectos y demos</span>
+        </a>
+      </div>
+    </div>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .not-found__inner {
+    max-inline-size: 40rem;
+    padding-block: 3rem;
+  }
+
+  .not-found__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+    margin-block-start: 2rem;
+  }
+</style>

@@ -1,0 +1,62 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE } from '../config/site';
+---
+
+<Layout
+  title={`Términos de Servicio y Garantías | ${SITE.name}`}
+  description="Condiciones comerciales, propiedad intelectual, garantía de 30 días y modalidad de contratación de NeuralJIRA."
+>
+  <Header />
+  <main class="section">
+    <div class="container">
+      <article class="prose">
+        <p class="eyebrow">Condiciones Comerciales</p>
+        <h1 id="contenido-principal" tabindex="-1">Términos de Servicio y Garantías</h1>
+        <p class="font-mono" style="font-size: 0.82rem; color: var(--text-muted);">
+          Última actualización: Noviembre 2026
+        </p>
+
+        <h2>1. Alcance y cotizaciones</h2>
+        <p>
+          Cada proyecto de <strong>{SITE.name}</strong> se cotiza a la medida en pesos colombianos (COP)
+          o dólares estadounidenses (USD) tras un diagnóstico técnico gratuito. Todo desarrollo inicia
+          únicamente tras la aprobación de una propuesta escrita que detalla alcance, entregables,
+          plazos y criterios de aceptación.
+        </p>
+
+        <h2>2. Forma de pago y facturación</h2>
+        <ul>
+          <li>Modalidad estándar: 50% de anticipo al iniciar y 50% contra entrega y validación acordada.</li>
+          <li>Todos los servicios cuentan con facturación electrónica formal conforme a la normativa DIAN vigente.</li>
+        </ul>
+
+        <h2>3. Propiedad intelectual</h2>
+        <p>
+          Una vez liquidado el valor total del contrato, el cliente recibe el <strong>100% de la propiedad del código
+          fuente desarrollado a medida</strong>, accesos administrativos y control de dominios o cuentas desplegadas
+          para su proyecto, salvo librerías de código abierto bajo sus respectivas licencias o componentes núcleo
+          licenciados expresamente como SaaS.
+        </p>
+
+        <h2>4. Garantía post-lanzamiento (30 días)</h2>
+        <p>
+          Cada proyecto incluye 30 días calendario de garantía técnica posterior a la entrega en producción para
+          corregir defectos funcionales atribuibles al desarrollo sin costo adicional. Nuevas funcionalidades o
+          cambios de alcance se cotizan por separado.
+        </p>
+
+        <h2>5. Contacto</h2>
+        <p>
+          Para consultas contractuales o acuerdos de confidencialidad (NDA), escribe a{' '}
+          <a href={`mailto:${SITE.email}`} style="color: var(--brand-accent); text-decoration: underline;">
+            {SITE.email}
+          </a>.
+        </p>
+      </article>
+    </div>
+  </main>
+  <Footer />
+</Layout>

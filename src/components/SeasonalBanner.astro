@@ -1,0 +1,196 @@
+---
+import Icon from './Icon.astro';
+
+const motes = [
+  { left: '8%', size: '3px', dur: '13s', delay: '0s', drift: '18px' },
+  { left: '19%', size: '4px', dur: '16s', delay: '-4s', drift: '-20px' },
+  { left: '31%', size: '3px', dur: '11s', delay: '-2s', drift: '14px' },
+  { left: '46%', size: '5px', dur: '17s', delay: '-7s', drift: '-16px' },
+  { left: '58%', size: '3px', dur: '12s', delay: '-3s', drift: '22px' },
+  { left: '72%', size: '4px', dur: '15s', delay: '-6s', drift: '-18px' },
+  { left: '84%', size: '3px', dur: '14s', delay: '-1s', drift: '12px' },
+  { left: '93%', size: '4px', dur: '18s', delay: '-9s', drift: '-14px' },
+];
+---
+
+<!-- Ultra-subtle seasonal atmospheric shimmer (strictly gated under prefers-reduced-motion: no-preference) -->
+<div class="seasonal-ornament" aria-hidden="true">
+  {motes.map((m) => (
+    <span
+      class="seasonal-ornament__mote"
+      style={`left:${m.left};--mote-size:${m.size};--mote-dur:${m.dur};--mote-delay:${m.delay};--mote-drift:${m.drift};`}
+    />
+  ))}
+</div>
+
+<!-- Commercial Seasonal Campaign Bar (admin-controlled, no public theme switcher) -->
+<aside
+  id="seasonal-banner"
+  class="seasonal-banner"
+  aria-label="Aviso de temporada"
+  hidden
+>
+  <div class="container seasonal-banner__inner">
+    <div class="seasonal-banner__copy">
+      <span class="seasonal-banner__badge" id="seasonal-banner-badge"></span>
+      <p class="seasonal-banner__text" id="seasonal-banner-message"></p>
+      <a class="seasonal-banner__cta" id="seasonal-banner-cta" href="/#contacto">
+        <span id="seasonal-banner-cta-label">Cotizar proyecto</span>
+        <Icon name="arrow-right" size={14} />
+      </a>
+    </div>
+
+    <div class="seasonal-banner__controls">
+      <button
+        type="button"
+        class="seasonal-banner__action"
+        id="seasonal-motion-btn"
+        hidden
+      >
+        <Icon name="pause" size={13} class="icon-pause" />
+        <Icon name="play" size={13} class="icon-play" />
+        <span id="seasonal-motion-label">Pausar efectos</span>
+      </button>
+
+      <button
+        type="button"
+        class="seasonal-banner__close"
+        id="seasonal-dismiss-btn"
+        aria-label="Cerrar aviso de temporada"
+      >
+        <Icon name="x" size={15} />
+      </button>
+    </div>
+  </div>
+</aside>
+
+<style>
+  .seasonal-banner {
+    background: color-mix(in oklab, var(--season-accent) 10%, var(--surface-elevated));
+    border-block-end: 1px solid var(--season-accent-border);
+    color: var(--text-primary);
+    position: relative;
+    z-index: 60;
+    font-size: 0.84rem;
+  }
+
+  .seasonal-banner[hidden] {
+    display: none;
+  }
+
+  .seasonal-banner__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    padding-block: 0.5rem;
+  }
+
+  .seasonal-banner__copy {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem 0.65rem;
+    flex: 1 1 28rem;
+  }
+
+  .seasonal-banner__badge {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.16rem 0.55rem;
+    border-radius: var(--radius-pill);
+    background: var(--season-accent);
+    color: var(--season-on-accent);
+    flex-shrink: 0;
+  }
+
+  .seasonal-banner__text {
+    color: var(--text-primary);
+    font-size: 0.82rem;
+    line-height: 1.4;
+  }
+
+  .seasonal-banner__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--season-accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    white-space: nowrap;
+  }
+
+  .seasonal-banner__cta:hover {
+    color: var(--season-accent-hover);
+  }
+
+  .seasonal-banner__controls {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-shrink: 0;
+  }
+
+  .seasonal-banner__action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.74rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    padding: 0.24rem 0.55rem;
+    min-block-size: 1.8rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-subtle);
+    background: var(--surface-elevated);
+    white-space: nowrap;
+    transition: border-color 150ms ease, color 150ms ease;
+  }
+
+  .seasonal-banner__action:hover {
+    border-color: var(--border-strong);
+    color: var(--text-primary);
+  }
+
+  .seasonal-banner__action[hidden] {
+    display: none;
+  }
+
+  .seasonal-banner__close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: 1.85rem;
+    min-block-size: 1.85rem;
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    transition: background-color 150ms ease, color 150ms ease;
+  }
+
+  .seasonal-banner__close:hover {
+    background: var(--surface-subtle);
+    color: var(--text-primary);
+  }
+
+  .seasonal-banner__action :global(.icon-play) {
+    display: none;
+  }
+  :global(:root[data-motion="paused"]) .seasonal-banner__action :global(.icon-pause) {
+    display: none;
+  }
+  :global(:root[data-motion="paused"]) .seasonal-banner__action :global(.icon-play) {
+    display: inline-block;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #seasonal-motion-btn {
+      display: none !important;
+    }
+  }
+</style>

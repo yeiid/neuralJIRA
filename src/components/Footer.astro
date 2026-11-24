@@ -1,85 +1,164 @@
 ---
+import BrandMark from './BrandMark.astro';
+import Icon from './Icon.astro';
+import { SITE } from '../config/site';
+
 const currentYear = new Date().getFullYear();
 ---
 
-<footer class="footer">
-    <div class="container footer-content">
-        <div class="footer-brand">
-            <span class="logo-text"
-                >Neural<span class="text-gradient">JIRA</span></span
-            >
-            <p>Transformando negocios con tecnología.</p>
-        </div>
-        <div class="footer-links">
-            <div class="link-group">
-                <h4>Empresa</h4>
-                <a href="#inicio">Inicio</a>
-                <a href="#servicios">Servicios</a>
-                <a href="#contacto">Contacto</a>
-            </div>
-            <div class="link-group">
-                <h4>Legal</h4>
-                <a href="#">Privacidad</a>
-                <a href="#">Términos</a>
-            </div>
-        </div>
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="/" class="footer-logo" aria-label={`${SITE.name} — Inicio`}>
+          <BrandMark size={28} />
+          <span>Neural<strong>JIRA</strong></span>
+        </a>
+        <p class="footer-desc">
+          Estudio colombiano de ingeniería de software: landing pages comerciales, tiendas online,
+          bots de WhatsApp con IA y arquitectura Local-First.
+        </p>
+        <p class="footer-loc font-mono">
+          <Icon name="map-pin" size={13} />
+          <span>{SITE.location}</span>
+        </p>
+      </div>
+
+      <div class="footer-columns">
+        <nav class="footer-col" aria-label="Navegación">
+          <h4>Navegación</h4>
+          <ul role="list">
+            <li><a href="/#servicios">Servicios</a></li>
+            <li><a href="/#proyectos">Proyectos Comerciales</a></li>
+            <li><a href="/#impacto-social">Impacto Social (Free)</a></li>
+            <li><a href="/#nosotros">Quiénes Somos</a></li>
+            <li><a href="/#contacto">Solicitar Cotización</a></li>
+            <li>
+              <a href={SITE.portfolioUrl} target="_blank" rel="noopener noreferrer">
+                Portafolio Técnico
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+        <nav class="footer-col" aria-label="Legal y contacto">
+          <h4>Legal y Contacto</h4>
+          <ul role="list">
+            <li><a href="/privacidad">Política de Privacidad (Ley 1581)</a></li>
+            <li><a href="/terminos">Términos y Garantías</a></li>
+            <li><a href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
+          </ul>
+        </nav>
+      </div>
     </div>
-    <div class="container copyright">
-        <p>&copy; {currentYear} NeuralJIRA. Todos los derechos reservados.</p>
+
+    <div class="footer-bottom">
+      <p>&copy; {currentYear} {SITE.name}. Todos los derechos reservados.</p>
+      <p class="font-mono">Ingeniería colombiana · Código propietario</p>
     </div>
+  </div>
 </footer>
 
 <style>
-    .footer {
-        background: var(--color-bg);
-        border-top: 1px solid var(--border-color);
-        padding: var(--spacing-xl) 0 var(--spacing-lg);
-        margin-top: auto;
-    }
+  .site-footer {
+    background: var(--surface-subtle);
+    border-block-start: 1px solid var(--border-subtle);
+    padding-block: clamp(3rem, 2.5rem + 2vw, 4.25rem) 2rem;
+  }
 
-    .footer-content {
-        display: flex;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: var(--spacing-xl);
-        margin-bottom: var(--spacing-xl);
-    }
+  .footer-top {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1.5fr);
+    gap: 2.5rem 3.5rem;
+    padding-block-end: 2rem;
+    border-block-end: 1px solid var(--border-subtle);
+  }
 
-    .footer-brand .logo-text {
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: var(--color-text);
-        display: block;
-        margin-bottom: var(--spacing-sm);
-    }
+  .footer-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
 
-    .footer-links {
-        display: flex;
-        gap: var(--spacing-xl);
-    }
+  .footer-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-display);
+    font-size: 1.08rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    width: fit-content;
+  }
 
-    .link-group h4 {
-        font-size: 1rem;
-        margin-bottom: var(--spacing-md);
-        color: var(--color-text);
-    }
+  .footer-logo strong {
+    font-weight: 700;
+  }
 
-    .link-group a {
-        display: block;
-        color: var(--color-text-muted);
-        margin-bottom: var(--spacing-sm);
-        font-size: 0.9rem;
-    }
+  .footer-desc {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    max-inline-size: 40ch;
+  }
 
-    .link-group a:hover {
-        color: var(--color-primary);
-    }
+  .footer-loc {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.76rem;
+    color: var(--text-muted);
+  }
 
-    .copyright {
-        text-align: center;
-        padding-top: var(--spacing-lg);
-        border-top: 1px solid var(--border-color);
-        font-size: 0.85rem;
-        color: var(--color-text-muted);
+  .footer-columns {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.75rem;
+  }
+
+  .footer-col h4 {
+    font-size: 0.82rem;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-primary);
+    margin-block-end: 0.85rem;
+  }
+
+  .footer-col ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .footer-col a {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    transition: color 150ms ease;
+  }
+
+  .footer-col a:hover {
+    color: var(--brand-accent);
+  }
+
+  .footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding-block-start: 1.25rem;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+  }
+
+  .footer-bottom p {
+    color: var(--text-muted);
+  }
+
+  @media (max-width: 780px) {
+    .footer-top,
+    .footer-columns {
+      grid-template-columns: 1fr;
     }
+  }
 </style>

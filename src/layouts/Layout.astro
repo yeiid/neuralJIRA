@@ -1,34 +1,301 @@
 ---
-import "../styles/global.css";
+import '../styles/global.css';
+import { SITE } from '../config/site';
+import { SEASONS, getConfiguredSeasonMode } from '../config/seasons';
+import SeasonalBanner from '../components/SeasonalBanner.astro';
 
 interface Props {
-	title: string;
-	description?: string;
+  title?: string;
+  description?: string;
+  ogImage?: string;
+  noindex?: boolean;
+  schemaExtra?: Record<string, unknown>;
 }
 
 const {
-	title,
-	description = "Advisory and Custom Software Solutions for Businesses",
+  title = SITE.defaultTitle,
+  description = SITE.defaultDescription,
+  ogImage = '/og-image.png',
+  noindex = false,
+  schemaExtra,
 } = Astro.props;
+
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? SITE.url).toString();
+const ogImageUrl = new URL(ogImage, Astro.site ?? SITE.url).toString();
+const configuredSeasonMode = getConfiguredSeasonMode();
+
+const seasonManifest = Object.values(SEASONS).map((s) => ({
+  id: s.id,
+  ornament: s.ornament,
+  dateRange: s.dateRange,
+  banner: s.banner,
+}));
+
+const organizationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: SITE.name,
+  url: SITE.url,
+  email: SITE.email,
+  description: SITE.defaultDescription,
+  areaServed: {
+    '@type': 'Country',
+    name: 'Colombia',
+  },
+  address: {
+    '@type': 'PostalAddress',
+    addressCountry: 'CO',
+  },
+  founder: {
+    '@type': 'Person',
+    name: SITE.founder,
+    jobTitle: SITE.founderRole,
+    url: SITE.portfolioUrl,
+  },
+  sameAs: [SITE.portfolioUrl],
+};
 ---
 
 <!doctype html>
-<html lang="es">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="description" content={description} />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/x-icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link
-			href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap"
-			rel="stylesheet"
-		/>
-		<title>{title}</title>
-	</head>
-	<body>
-		<slot />
-	</body>
+<html lang="es" data-season="default">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Mandatory color-scheme meta + anti-FOUC inline initializer (non-module, non-defer) -->
+    <meta name="color-scheme" content="light dark" />
+    <script is:inline define:vars={{ configuredSeasonMode, seasonManifest }}>
+      (function () {
+        var root = document.documentElement;
+        var meta = document.querySelector('meta[name="color-scheme"]');
+        var validIds = seasonManifest.map(function (s) { return s.id; });
+
+        // 1. Restore saved light/dark override (user-controlled moon/sun toggle)
+        try {
+          var savedScheme = localStorage.getItem('color-scheme');
+          if (meta && (savedScheme === 'light' || savedScheme === 'dark')) {
+            meta.setAttribute('content', savedScheme);
+          }
+        } catch (_) {}
+
+        // 2. Restore paused seasonal motion preference
+        try {
+          if (localStorage.getItem('nj-motion') === 'paused') {
+            root.setAttribute('data-motion', 'paused');
+          }
+        } catch (_) {}
+
+        // 3. Resolve admin-managed season: ?preview_season= (admin preview) > PUBLIC_SITE_SEASON > Colombia calendar
+        var resolved = 'default';
+        try {
+          var params = new URLSearchParams(window.location.search);
+          var adminPreview = params.get('preview_season');
+          if (adminPreview && validIds.indexOf(adminPreview) !== -1) {
+            resolved = adminPreview;
+          } else if (configuredSeasonMode !== 'auto' && validIds.indexOf(configuredSeasonMode) !== -1) {
+            resolved = configuredSeasonMode;
+          } else {
+            var now = new Date();
+            var m = now.getMonth() + 1;
+            var d = now.getDate();
+            try {
+              var parts = new Intl.DateTimeFormat('en-CA', {
+                timeZone: 'America/Bogota',
+                month: 'numeric',
+                day: 'numeric',
+              }).formatToParts(now);
+              for (var i = 0; i < parts.length; i++) {
+                if (parts[i].type === 'month') m = parseInt(parts[i].value, 10);
+                if (parts[i].type === 'day') d = parseInt(parts[i].value, 10);
+              }
+            } catch (_) {}
+            var md = m * 100 + d;
+            for (var j = 0; j < seasonManifest.length; j++) {
+              var r = seasonManifest[j].dateRange;
+              if (!r) continue;
+              var start = r.startMonth * 100 + r.startDay;
+              var end = r.endMonth * 100 + r.endDay;
+              var match = start <= end ? md >= start && md <= end : md >= start || md <= end;
+              if (match) {
+                resolved = seasonManifest[j].id;
+                break;
+              }
+            }
+          }
+        } catch (_) {}
+
+        root.setAttribute('data-season', resolved);
+        window.__NJ_SEASONS__ = {
+          manifest: seasonManifest,
+          initial: resolved,
+        };
+      })();
+    </script>
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
+    <!-- OpenGraph & Twitter Cards -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content={SITE.locale} />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImageUrl} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Structured Data (Schema.org JSON-LD) -->
+    <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
+    {schemaExtra && (
+      <script type="application/ld+json" set:html={JSON.stringify(schemaExtra)} />
+    )}
+  </head>
+  <body>
+    <a href="#contenido-principal" class="skip-link visually-hidden">
+      Saltar al contenido principal
+    </a>
+
+    <SeasonalBanner />
+    <slot />
+
+    <!-- Client controller: Moon/Sun toggle + admin-managed seasonal banner hydration -->
+    <script>
+      type SeasonEntry = {
+        id: string;
+        ornament: string;
+        dateRange: { startMonth: number; startDay: number; endMonth: number; endDay: number } | null;
+        banner: { badge: string; message: string; ctaLabel: string; ctaHref: string } | null;
+      };
+
+      declare global {
+        interface Window {
+          __NJ_SEASONS__?: {
+            manifest: SeasonEntry[];
+            initial: string;
+          };
+        }
+      }
+
+      (function initSiteControls() {
+        const root = document.documentElement;
+        const meta = document.querySelector('meta[name="color-scheme"]');
+        const data = window.__NJ_SEASONS__;
+
+        function getSystemScheme(): 'light' | 'dark' {
+          return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+
+        function getStoredScheme(): 'light' | 'dark' | null {
+          try {
+            const v = localStorage.getItem('color-scheme');
+            return v === 'light' || v === 'dark' ? v : null;
+          } catch {
+            return null;
+          }
+        }
+
+        function toggleColorScheme() {
+          const currentRendered = getStoredScheme() ?? getSystemScheme();
+          const target: 'light' | 'dark' = currentRendered === 'dark' ? 'light' : 'dark';
+          // Check divergence only at storage time (never retroactively on OS change)
+          try {
+            if (target === getSystemScheme()) {
+              localStorage.removeItem('color-scheme');
+              meta?.setAttribute('content', 'light dark');
+            } else {
+              localStorage.setItem('color-scheme', target);
+              meta?.setAttribute('content', target);
+            }
+          } catch {
+            meta?.setAttribute('content', target);
+          }
+        }
+
+        document.querySelectorAll<HTMLButtonElement>('[data-scheme-toggle]').forEach((btn) => {
+          btn.addEventListener('click', toggleColorScheme);
+        });
+
+        // Hydrate admin-resolved seasonal banner
+        if (data) {
+          const activeId = root.getAttribute('data-season') ?? data.initial;
+          const entry = data.manifest.find((s) => s.id === activeId);
+
+          const bannerEl = document.getElementById('seasonal-banner');
+          const badgeEl = document.getElementById('seasonal-banner-badge');
+          const msgEl = document.getElementById('seasonal-banner-message');
+          const ctaEl = document.getElementById('seasonal-banner-cta') as HTMLAnchorElement | null;
+          const ctaLabelEl = document.getElementById('seasonal-banner-cta-label');
+          const motionBtn = document.getElementById('seasonal-motion-btn');
+
+          let dismissed = false;
+          try {
+            dismissed = sessionStorage.getItem(`nj-banner-dismissed-${activeId}`) === '1';
+          } catch {}
+
+          if (bannerEl && entry?.banner && !dismissed) {
+            if (badgeEl) badgeEl.textContent = entry.banner.badge;
+            if (msgEl) msgEl.textContent = entry.banner.message;
+            if (ctaEl) ctaEl.href = entry.banner.ctaHref;
+            if (ctaLabelEl) ctaLabelEl.textContent = entry.banner.ctaLabel;
+            if (motionBtn) {
+              const hasMotion = entry.ornament === 'snow' || entry.ornament === 'embers' || entry.ornament === 'spark';
+              motionBtn.hidden = !hasMotion;
+            }
+            bannerEl.hidden = false;
+          }
+
+          function syncMotionLabel() {
+            const paused = root.getAttribute('data-motion') === 'paused';
+            const label = document.getElementById('seasonal-motion-label');
+            if (label) label.textContent = paused ? 'Activar efectos' : 'Pausar efectos';
+          }
+
+          motionBtn?.addEventListener('click', () => {
+            const isPaused = root.getAttribute('data-motion') === 'paused';
+            if (isPaused) {
+              root.removeAttribute('data-motion');
+              try { localStorage.removeItem('nj-motion'); } catch {}
+            } else {
+              root.setAttribute('data-motion', 'paused');
+              try { localStorage.setItem('nj-motion', 'paused'); } catch {}
+            }
+            syncMotionLabel();
+          });
+
+          document.getElementById('seasonal-dismiss-btn')?.addEventListener('click', () => {
+            try { sessionStorage.setItem(`nj-banner-dismissed-${activeId}`, '1'); } catch {}
+            if (bannerEl) bannerEl.hidden = true;
+          });
+
+          syncMotionLabel();
+        }
+
+        // Cross-tab sync for color-scheme and motion preference
+        window.addEventListener('storage', (event) => {
+          if (event.key === 'color-scheme') {
+            const v = event.newValue;
+            meta?.setAttribute('content', v === 'light' || v === 'dark' ? v : 'light dark');
+          }
+          if (event.key === 'nj-motion') {
+            if (event.newValue === 'paused') {
+              root.setAttribute('data-motion', 'paused');
+            } else {
+              root.removeAttribute('data-motion');
+            }
+          }
+        });
+      })();
+    </script>
+  </body>
 </html>

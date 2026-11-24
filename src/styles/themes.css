@@ -1,0 +1,131 @@
+/* ═══════════════════════════════════════════════════════════════════
+   NeuralJIRA Seasonal Themes Engine (Admin-Controlled)
+   Activated via <html data-season="..."> without touching components.
+   Preserves NeuralJIRA's core brand palette (#0B0F1A + #F97316 + #38BDF8)
+   while flavoring campaign banners, logo pips, and subtle ambient touches.
+   ═══════════════════════════════════════════════════════════════════ */
+
+@layer theme {
+  /* ── HALLOWEEN EDITORIAL (Oct 1 – Oct 31) ──
+     Burnt pumpkin accent + subtle editorial plum for October campaign bar & ornaments */
+  :root[data-season="halloween"] {
+    --season-accent-light: #9a3412;
+    --season-accent-dark: #fb923c;
+    --season-accent-hover-light: #7c2d12;
+    --season-accent-hover-dark: #fdba74;
+    --season-on-accent-light: #ffffff;
+    --season-on-accent-dark: #0b0f1a;
+    --season-secondary-light: #7e22ce;
+    --season-secondary-dark: #c084fc;
+    --ambient-wash-1-light: rgba(249, 115, 22, 0.1);
+    --ambient-wash-1-dark: rgba(249, 115, 22, 0.16);
+    --ambient-wash-2-light: rgba(126, 34, 206, 0.08);
+    --ambient-wash-2-dark: rgba(192, 132, 252, 0.12);
+  }
+
+  /* ── BLACK FRIDAY & CYBERLUNES (Admin manual activation) ──
+     Architectural champagne gold for high-conversion campaign header */
+  :root[data-season="black-friday"] {
+    --season-accent-light: #92400e;
+    --season-accent-dark: #f59e0b;
+    --season-accent-hover-light: #78350f;
+    --season-accent-hover-dark: #fbbf24;
+    --season-on-accent-light: #ffffff;
+    --season-on-accent-dark: #0b0f1a;
+    --season-secondary-light: #0369a1;
+    --season-secondary-dark: #38bdf8;
+    --ambient-wash-1-light: rgba(245, 158, 11, 0.09);
+    --ambient-wash-1-dark: rgba(245, 158, 11, 0.14);
+  }
+
+  /* ── NAVIDAD CHAMPÁN & PINO (Nov 1 – Dec 31 Colombia) ──
+     Refined pine emerald + warm champagne gold strictly on campaign banner & ornaments,
+     keeping NeuralJIRA's #0B0F1A / #F97316 / #38BDF8 identity intact across the site */
+  :root[data-season="christmas"] {
+    --season-accent-light: #0f6b56;
+    --season-accent-dark: #34d399;
+    --season-accent-hover-light: #0b5342;
+    --season-accent-hover-dark: #6ee7b7;
+    --season-on-accent-light: #ffffff;
+    --season-on-accent-dark: #0b0f1a;
+    --season-secondary-light: #9a6700;
+    --season-secondary-dark: #f2c96b;
+  }
+
+  /* ── AÑO NUEVO & ARRANQUE Q1 (Admin manual activation) ──
+     Electric sky sapphire + subtle champagne accents */
+  :root[data-season="new-year"] {
+    --season-accent-light: #0369a1;
+    --season-accent-dark: #38bdf8;
+    --season-accent-hover-light: #075985;
+    --season-accent-hover-dark: #7dd3fc;
+    --season-on-accent-light: #ffffff;
+    --season-on-accent-dark: #0b0f1a;
+    --season-secondary-light: #9a6700;
+    --season-secondary-dark: #f2c96b;
+  }
+
+  /* ── Ultra-subtle seasonal atmospheric shimmer (opt-in under reduced-motion) ── */
+  .seasonal-ornament {
+    position: fixed;
+    inset-block-start: 0;
+    inset-inline: 0;
+    height: 16rem;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  :root[data-season="christmas"] .seasonal-ornament,
+  :root[data-season="halloween"] .seasonal-ornament,
+  :root[data-season="new-year"] .seasonal-ornament,
+  :root[data-season="black-friday"] .seasonal-ornament {
+    opacity: 1;
+  }
+
+  .seasonal-ornament__mote {
+    position: absolute;
+    inset-block-start: -1rem;
+    inline-size: var(--mote-size, 4px);
+    block-size: var(--mote-size, 4px);
+    border-radius: 50%;
+    background: var(--season-secondary);
+    opacity: 0;
+  }
+
+  :root[data-season="christmas"] .seasonal-ornament__mote {
+    background: color-mix(in oklab, var(--season-secondary) 68%, transparent);
+  }
+
+  :root[data-season="halloween"] .seasonal-ornament__mote {
+    background: color-mix(in oklab, var(--season-accent) 60%, transparent);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :root:not([data-motion="paused"])[data-season="christmas"] .seasonal-ornament__mote,
+    :root:not([data-motion="paused"])[data-season="halloween"] .seasonal-ornament__mote,
+    :root:not([data-motion="paused"])[data-season="new-year"] .seasonal-ornament__mote {
+      animation: seasonalDrift var(--mote-dur, 12s) linear infinite;
+      animation-delay: var(--mote-delay, 0s);
+    }
+  }
+
+  @keyframes seasonalDrift {
+    0% {
+      transform: translate3d(0, 0, 0);
+      opacity: 0;
+    }
+    15% {
+      opacity: 0.45;
+    }
+    85% {
+      opacity: 0.35;
+    }
+    100% {
+      transform: translate3d(var(--mote-drift, 24px), 16rem, 0);
+      opacity: 0;
+    }
+  }
+}

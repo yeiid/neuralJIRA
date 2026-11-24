@@ -1,0 +1,56 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE } from '../config/site';
+---
+
+<Layout
+  title={`Política de Privacidad y Habeas Data | ${SITE.name}`}
+  description="Política de tratamiento de datos personales de NeuralJIRA conforme a la Ley 1581 de 2012 de Colombia."
+>
+  <Header />
+  <main class="section">
+    <div class="container">
+      <article class="prose">
+        <p class="eyebrow">Cumplimiento Legal · Colombia</p>
+        <h1 id="contenido-principal" tabindex="-1">Política de Privacidad y Tratamiento de Datos</h1>
+        <p class="font-mono" style="font-size: 0.82rem; color: var(--text-muted);">
+          Última actualización: Noviembre 2026 · Ley 1581 de 2012 (Habeas Data)
+        </p>
+
+        <h2>1. Responsable del tratamiento</h2>
+        <p>
+          <strong>{SITE.name}</strong>, con operación en {SITE.location}, es responsable del tratamiento
+          de los datos personales suministrados voluntariamente a través de los formularios de contacto,
+          correo electrónico y canales oficiales de WhatsApp.
+        </p>
+
+        <h2>2. Finalidad de la recolección</h2>
+        <p>Los datos recolectados (nombre, correo electrónico, empresa y descripción del requerimiento) se utilizan exclusivamente para:</p>
+        <ul>
+          <li>Responder solicitudes de diagnóstico técnico, cotizaciones o demostraciones de producto.</li>
+          <li>Formalizar propuestas comerciales, contratos de prestación de servicios y facturación electrónica DIAN.</li>
+          <li>Brindar soporte técnico durante la vigencia del proyecto y la garantía acordada.</li>
+        </ul>
+
+        <h2>3. Principios y no comercialización</h2>
+        <p>
+          NeuralJIRA <strong>no vende, alquila ni comparte</strong> bases de datos de clientes o prospectos con terceros
+          con fines publicitarios. El sitio no utiliza rastreadores invasivos de terceros; únicamente almacena en tu
+          navegador la preferencia local opcional de modo claro u oscuro.
+        </p>
+
+        <h2>4. Derechos del titular (ARCO)</h2>
+        <p>
+          Conforme a la Ley 1581 de 2012 y el Decreto 1377 de 2013, puedes conocer, actualizar, rectificar o solicitar
+          la supresión de tus datos personales en cualquier momento escribiendo a{' '}
+          <a href={`mailto:${SITE.email}`} style="color: var(--brand-accent); text-decoration: underline;">
+            {SITE.email}
+          </a>.
+        </p>
+      </article>
+    </div>
+  </main>
+  <Footer />
+</Layout>

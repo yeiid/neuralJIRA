@@ -1,0 +1,309 @@
+---
+import Icon from './Icon.astro';
+import type { IconName } from '../config/icons';
+
+interface SocialProject {
+  name: string;
+  subtitle: string;
+  category: string;
+  access: string;
+  description: string;
+  impact: string;
+  tech: string[];
+  icon: IconName;
+}
+
+const socialProjects: SocialProject[] = [
+  {
+    name: 'GuajiraMesh',
+    subtitle: 'Red WiFi Mesh Comunitaria',
+    category: 'Infraestructura & Conectividad',
+    access: 'Acceso libre · Comunitario',
+    description:
+      'Infraestructura descentralizada de conectividad para escuelas y barrios con sincronización local offline-first, llevando recursos digitales a comunidades sin depender de enlaces costosos.',
+    impact: 'Conectividad soberana para escuelas y nodos barriales en La Guajira.',
+    tech: ['OpenWrt', 'B.A.T.M.A.N. adv', 'Headscale VPN', 'sync-lan (Rust)'],
+    icon: 'radio',
+  },
+  {
+    name: 'EcoRaíces',
+    subtitle: 'Conservación Ambiental GIS',
+    category: 'Ambiental · Offline-First',
+    access: 'Gratuito · Datos abiertos',
+    description:
+      'Plataforma para mapear flora nativa, reservas hídricas y restauración del bosque seco tropical en La Guajira. Opera sin conexión en campo y sincroniza los registros al recuperar señal.',
+    impact: 'Protección de biodiversidad en Barrancas, Hatonuevo, Riohacha y Cabo de la Vela.',
+    tech: ['PostgreSQL', 'MapLibre GL', 'Offline-First'],
+    icon: 'leaf',
+  },
+  {
+    name: 'Rincón Guajiro',
+    subtitle: 'Turismo Cultural & Artesanía Wayuu',
+    category: 'Territorio & Comercio Justo',
+    access: 'Gratuito · Sin intermediarios',
+    description:
+      'Catálogo interactivo de destinos tradicionales, rancherías y artesanas de mochilas wayuu para conectar directamente a los creadores locales con visitantes y compradores.',
+    impact: 'Ingresos directos para familias artesanas y turismo sostenible en el territorio.',
+    tech: ['Catálogo Abierto', 'Comercio Justo', 'Cultura Wayuu'],
+    icon: 'map-pin',
+  },
+  {
+    name: 'LlamaCppF',
+    subtitle: 'Edge AI Distribuido',
+    category: 'IA Democratizada',
+    access: 'Abierto · Hardware accesible',
+    description:
+      'Inferencia distribuida de modelos de lenguaje (LLMs) sobre red local LAN y USB combinando equipos Linux y teléfonos Android con Termux, sin depender de GPUs privativas.',
+    impact: 'Inteligencia artificial local y privada en equipos convencionales.',
+    tech: ['Edge AI', 'LAN / USB', 'Linux + Termux'],
+    icon: 'cpu',
+  },
+  {
+    name: 'PyQuest',
+    subtitle: 'Gamificación en Python',
+    category: 'Formación STEM',
+    access: 'Gratuito · Escuelas públicas',
+    description:
+      'Plataforma lúdica de acceso libre diseñada para enseñar lógica algorítmica y fundamentos de programación en Python a jóvenes de colegios públicos y semilleros locales.',
+    impact: 'Primer paso práctico hacia la ingeniería de software para estudiantes.',
+    tech: ['Python', 'Aprendizaje Lúdico', 'Acceso Libre'],
+    icon: 'code',
+  },
+  {
+    name: 'practicaWEB & Territorio',
+    subtitle: 'Laboratorio Web & Centros Digitales',
+    category: 'Educación Abierta',
+    access: 'Gratuito · Comunitario',
+    description:
+      'Talleres guiados de desarrollo web moderno y uso productivo de IA para jóvenes en Centros Digitales y autodidactas, enfocados en construir proyectos reales.',
+    impact: 'Formación práctica en alianza con colegios técnicos y comunidades locales.',
+    tech: ['HTML / CSS / JS', 'Talleres IA', 'Educación Abierta'],
+    icon: 'book-open',
+  },
+];
+---
+
+<section id="impacto-social" class="section section--tinted social-section">
+  <div class="container">
+    <div class="section-head section-head--split">
+      <div>
+        <p class="eyebrow">Aspecto Social · Proyectos Libres (Free)</p>
+        <h2>Tecnología gratuita y abierta al servicio del territorio.</h2>
+        <p class="section-lead">
+          La tracción de nuestros proyectos comerciales financia iniciativas libres de conectividad,
+          conservación ambiental, comercio justo, educación STEM e IA accesible en comunidades de toda Colombia.
+        </p>
+      </div>
+
+      <span class="pill pill--success social-pill">
+        <Icon name="users" size={14} />
+        <span>{socialProjects.length} iniciativas de acceso libre</span>
+      </span>
+    </div>
+
+    <div class="social-grid">
+      {socialProjects.map((project) => (
+        <article class="surface-card surface-card--interactive social-card">
+          <div class="social-card__head">
+            <span class="social-card__icon" aria-hidden="true">
+              <Icon name={project.icon} size={20} />
+            </span>
+            <div class="social-card__badges">
+              <span class="pill pill--success">{project.access}</span>
+            </div>
+          </div>
+
+          <div class="social-card__titles">
+            <span class="social-card__cat font-mono">{project.category}</span>
+            <h3 class="social-card__name">{project.name}</h3>
+            <p class="social-card__sub">{project.subtitle}</p>
+          </div>
+
+          <p class="social-card__desc">{project.description}</p>
+
+          <p class="social-card__impact">
+            <strong>Propósito:</strong> {project.impact}
+          </p>
+
+          <ul class="social-card__tech" role="list" aria-label={`Tecnologías de ${project.name}`}>
+            {project.tech.map((t) => (
+              <li class="social-tech-tag font-mono">{t}</li>
+            ))}
+          </ul>
+        </article>
+      ))}
+    </div>
+
+    <!-- Clean Community Alliance Strip -->
+    <div class="social-cta-strip">
+      <div class="social-cta-strip__copy">
+        <strong>¿Representas una escuela, fundación o colectivo comunitario?</strong>
+        <p>
+          Nuestros proyectos sociales son de acceso libre. Escríbenos si quieres implementar un taller,
+          desplegar un nodo comunitario o sumar aliados al territorio.
+        </p>
+      </div>
+      <a
+        href="#contacto"
+        class="btn btn-secondary btn-sm"
+        data-prefill-service="Iniciativa Social / Alianza"
+        data-prefill-note="Hola NeuralJIRA, nos gustaría conversar sobre una alianza o implementación de uno de sus proyectos sociales gratuitos."
+      >
+        <span>Proponer alianza social</span>
+        <Icon name="arrow-right" size={14} />
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .social-pill {
+    padding: 0.4rem 0.85rem;
+    font-size: 0.76rem;
+    align-self: flex-end;
+  }
+
+  /* Clean 3x2 editorial grid on desktop, 2x3 on tablet, 1x6 on mobile */
+  .social-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+    margin-block-end: 2rem;
+  }
+
+  .social-card {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .social-card__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+
+  .social-card__icon {
+    inline-size: 2.5rem;
+    block-size: 2.5rem;
+    border-radius: var(--radius-md);
+    background: var(--status-success-soft);
+    color: var(--status-success);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .social-card__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .social-card__titles {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .social-card__cat {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .social-card__name {
+    font-size: 1.2rem;
+    color: var(--text-primary);
+  }
+
+  .social-card__sub {
+    font-size: 0.86rem;
+    font-weight: 600;
+    color: var(--brand-secondary);
+  }
+
+  .social-card__desc {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    flex: 1;
+  }
+
+  .social-card__impact {
+    font-size: 0.84rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+    padding: 0.7rem 0.85rem;
+    border-radius: var(--radius-md);
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-subtle);
+  }
+
+  .social-card__impact strong {
+    color: var(--text-primary);
+  }
+
+  .social-card__tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    padding-block-start: 0.35rem;
+  }
+
+  .social-tech-tag {
+    font-size: 0.7rem;
+    padding: 0.18rem 0.5rem;
+    border-radius: var(--radius-sm);
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-muted);
+  }
+
+  /* Community Alliance Strip */
+  .social-cta-strip {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+    padding: 1.35rem 1.6rem;
+    background: var(--surface-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+  }
+
+  .social-cta-strip__copy {
+    flex: 1 1 24rem;
+  }
+
+  .social-cta-strip__copy strong {
+    display: block;
+    font-size: 0.96rem;
+    color: var(--text-primary);
+    margin-block-end: 0.2rem;
+  }
+
+  .social-cta-strip__copy p {
+    font-size: 0.86rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 1024px) {
+    .social-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 640px) {
+    .social-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

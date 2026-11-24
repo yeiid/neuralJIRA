@@ -1,166 +1,227 @@
 ---
-// Services.astro — Servicios Profesionales de Ingeniería y Desarrollo
-const WHATSAPP = "573058079573";
-const wa = (msg: string) =>
-  `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
+import Icon from './Icon.astro';
+import type { IconName } from '../config/icons';
+import WhatsAppBotDemo from './demos/WhatsAppBotDemo.astro';
+import { waUrl } from '../config/site';
 
-const services = [
+interface ServiceItem {
+  id: string;
+  icon: IconName;
+  title: string;
+  subtitle: string;
+  summary: string;
+  deliverables: string[];
+  demoAction?: {
+    label: string;
+    sandboxTitle: string;
+    sandboxUrl: string;
+  };
+  anchorAction?: {
+    label: string;
+    href: string;
+  };
+  cta: string;
+}
+
+const services: ServiceItem[] = [
   {
-    id: "web-seo",
-    icon: "🌐",
-    title: "Desarrollo Web & Portales de Alto Rendimiento",
-    subtitle: "Astro 5 · TypeScript · Next.js · Tailwind",
-    description:
-      "Construimos sitios web y portales ultra veloces, diseñados específicamente para posicionar en Google (SEO), cargar en menos de 1 segundo y convertir visitantes en clientes reales por WhatsApp o formulario.",
-    badge: "Velocidad & Conversión",
+    id: 'landing-web',
+    icon: 'globe',
+    title: 'Landing Pages & Sitios Web',
+    subtitle: 'Alta conversión · SEO técnico · Mobile-first',
+    summary:
+      'Construimos páginas comerciales y portales corporativos ultrarrápidos, diseñados para posicionar en Google y convertir visitas en conversaciones de venta.',
     deliverables: [
-      "Core Web Vitals < 1s (Puntuación 95+ en Google PageSpeed)",
-      "SEO técnico, microdatos Schema.org y posicionamiento local",
-      "Arquitectura multi-idioma (i18n) con soporte en lenguas nativas",
-      "Diseño responsive optimizado para smartphones y conexiones 4G/rurales",
-      "Entrega del código fuente 100% propio y sin dependencias obsoletas"
+      'Carga veloz incluso en redes móviles 4G y zonas rurales',
+      'SEO técnico, Schema.org y configuración de Google Business',
+      'Soporte multi-idioma y captación directa por WhatsApp',
+      'Código 100% propio sin plantillas pesadas',
     ],
-    metric: "LCP < 1.0s · 0 dependencias lentas",
-    cta: "Cotizar Desarrollo Web"
+    demoAction: {
+      label: 'Demo: CactusNet',
+      sandboxTitle: 'CactusNet — Landing Page Comercial',
+      sandboxUrl: 'https://cactusnet.com.co',
+    },
+    cta: 'Cotizar sitio web',
   },
   {
-    id: "bots-ia",
-    icon: "🤖",
-    title: "Automatización & Bots de WhatsApp con IA",
-    subtitle: "WhatsApp Cloud API · LLMs · n8n · CRM",
-    description:
-      "Transformamos canales de mensajería en máquinas de ventas y atención automatizada 24/7. Agentes inteligentes entrenados con tu catálogo que atienden consultas, cotizan y agendan sin esperas.",
-    badge: "Atención 24/7 sin Demoras",
+    id: 'ecommerce',
+    icon: 'box',
+    title: 'Tiendas Online & Catálogos',
+    subtitle: 'Comercio electrónico · Catálogo ágil · Móvil',
+    summary:
+      'Vitrinas digitales diseñadas para vender desde Instagram, WhatsApp y Google con exploración fluida de productos, carrito claro y pasarelas locales.',
     deliverables: [
-      "Respuestas inmediatas en lenguaje natural a preguntas frecuentes",
-      "Calificación automática de leads y sincronización directa con CRM",
-      "Envío instantáneo de cotizaciones, catálogos y enlaces de pago",
-      "Derivación fluida a asesores humanos cuando se requiere cierre",
-      "Cumplimiento formal de la Ley 1581 (Habeas Data Colombia)"
+      'Catálogo visual ligero optimizado para compradores en celular',
+      'Estructura indexable lista para campañas y búsqueda orgánica',
+      'Integración de stock, pedidos por WhatsApp o pago online',
+      'Panel administrable y escalable a tu ritmo comercial',
     ],
-    metric: "0s tiempo de espera · Atención continua",
-    cta: "Cotizar Bot de WhatsApp"
+    demoAction: {
+      label: 'Demo: Jamuchee',
+      sandboxTitle: 'Jamuchee — Tienda Online',
+      sandboxUrl: 'https://jamuchee.vercel.app/',
+    },
+    cta: 'Cotizar tienda online',
   },
   {
-    id: "software-medida",
-    icon: "⚡",
-    title: "Software a la Medida & Sistemas Local-First",
-    subtitle: "FastAPI · Go 1.24 · PostgreSQL · node:sqlite WAL",
-    description:
-      "Desarrollamos sistemas de gestión operativa (POS para restaurantes, inventarios con gemelos digitales 3D y control de despachos) con arquitectura tolerante a fallos que sigue funcionando aun si se cae internet.",
-    badge: "Cero Caídas de Operación",
+    id: 'bots-ia',
+    icon: 'message-square',
+    title: 'Bots de WhatsApp con IA',
+    subtitle: 'WhatsApp Cloud API · Calificación 24/7 · CRM',
+    summary:
+      'Asistentes entrenados con tu catálogo que responden en menos de un segundo, resuelven dudas frecuentes, califican leads y derivan cierres a tu equipo.',
     deliverables: [
-      "Operación continua en red local LAN (100% offline-first)",
-      "Bases de datos transaccionales ultra seguras (WAL mode)",
-      "Gemelos digitales y visualizaciones interactivas 3D con Three.js",
-      "Ejecutables nativos de doble clic para Windows y servidores Linux",
-      "Soporte y acompañamiento técnico directo en el punto de venta"
+      'Atención continua 24/7 con respuestas naturales y precisas',
+      'Registro automático de clientes potenciales en tu CRM',
+      'Envío inmediato de catálogos y agendamiento de citas',
+      'Cumplimiento formal de la Ley 1581 (Habeas Data Colombia)',
     ],
-    metric: "Disponibilidad 99.9% · Tolerante a cortes de red",
-    cta: "Cotizar Software a Medida"
+    anchorAction: {
+      label: 'Probar simulador abajo',
+      href: '#simulador-whatsapp',
+    },
+    cta: 'Cotizar bot con IA',
   },
   {
-    id: "consultoria",
-    icon: "📐",
-    title: "Arquitectura de Sistemas & Consultoría Técnica",
-    subtitle: "Auditoría de Código · Microservicios · Cloud & Edge",
-    description:
-      "Evaluamos y optimizamos plataformas existentes para eliminar lentitud, cuellos de botella en bases de datos o vulnerabilidades. Diseñamos la infraestructura tecnológica para escalar tu negocio con seguridad.",
-    badge: "Ingeniería Formal",
+    id: 'software-medida',
+    icon: 'cpu',
+    title: 'Software a Medida & Local-First',
+    subtitle: 'POS · Inventarios 3D · Operación sin internet',
+    summary:
+      'Sistemas operativos diseñados a la medida de tu negocio (restaurantes, bodegas, gimnasios) que siguen funcionando en red local aunque caiga internet.',
     deliverables: [
-      "Diagnóstico técnico profundo de rendimiento y seguridad",
-      "Migración de plataformas obsoletas (WordPress/Wix) a stacks modernos",
-      "Diseño y documentación de APIs RESTful según estándar OpenAPI",
-      "Contratos de confidencialidad (NDA), propiedad intelectual y SLA",
-      "Facturación electrónica formal DIAN y soporte post-entrega"
+      'Arquitectura Local-First tolerante a cortes de conectividad',
+      'Gemelos digitales 3D, pantallas de cocina KDS y comandas QR',
+      'Ejecutables nativos para Windows y servidores Linux',
+      'Acompañamiento técnico y puesta en marcha en punto de venta',
     ],
-    metric: "Soporte garantizado · Facturación electrónica",
-    cta: "Solicitar Diagnóstico"
-  }
+    anchorAction: {
+      label: 'Ver demos en slider',
+      href: '#proyectos',
+    },
+    cta: 'Cotizar software a medida',
+  },
 ];
 ---
 
-<section id="servicios" class="section services">
+<section id="servicios" class="section section--tinted services-section">
   <div class="container">
-    <div class="section-header">
-      <div class="badge-wrapper">
-        <span class="badge">// INGENIERÍA & SOLUCIONES DIGITALES</span>
-      </div>
-      <h2 class="section-title">
-        Servicios Diseñados para <span class="text-gradient">Negocios Reales</span>
-      </h2>
-      <p class="section-subtitle">
-        Desarrollamos soluciones tecnológicas con arquitectura escalable, código limpio y entregables tangibles por contrato. Sin plantillas genéricas ni cajas negras.
+    <div class="section-head">
+      <p class="eyebrow">Qué Vendemos</p>
+      <h2>Servicios digitales enfocados en ventas y operación real.</h2>
+      <p class="section-lead">
+        Cada proyecto se cotiza a la medida de tus objetivos, con entregables claros por contrato,
+        propiedad intelectual 100% para tu empresa y demos verificables.
       </p>
     </div>
 
     <div class="services-grid">
-      {
-        services.map((service) => (
-          <article class="service-card">
-            <header class="service-card-header">
-              <div class="icon-and-badge">
-                <span class="service-icon">{service.icon}</span>
-                <span class="service-chip">{service.badge}</span>
-              </div>
-              <h3 class="service-title">{service.title}</h3>
-              <p class="service-subtitle">{service.subtitle}</p>
-            </header>
+      {services.map((service) => (
+        <article class="surface-card surface-card--interactive service-card">
+          <div class="service-card__top">
+            <span class="service-card__icon" aria-hidden="true">
+              <Icon name={service.icon} size={20} />
+            </span>
 
-            <p class="service-description">{service.description}</p>
-
-            <div class="service-deliverables">
-              <h4 class="deliverables-heading">Qué incluye el servicio:</h4>
-              <ul class="deliverables-list">
-                {service.deliverables.map((item) => (
-                  <li>
-                    <span class="check-icon">✓</span>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <footer class="service-card-footer">
-              <div class="service-metric">
-                <span class="metric-dot"></span>
-                <span class="metric-text">{service.metric}</span>
-              </div>
-              <a
-                href={wa(`Hola NeuralJira, me gustaría cotizar el servicio: ${service.title}.`)}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="service-cta-btn"
+            {service.demoAction ? (
+              <button
+                type="button"
+                class="service-card__demo-btn font-mono"
+                data-open-sandbox
+                data-sandbox-title={service.demoAction.sandboxTitle}
+                data-sandbox-url={service.demoAction.sandboxUrl}
+                data-sandbox-service={service.title}
               >
-                {service.cta} <span>→</span>
+                <Icon name="play" size={12} />
+                <span>{service.demoAction.label}</span>
+              </button>
+            ) : service.anchorAction ? (
+              <a href={service.anchorAction.href} class="service-card__demo-btn font-mono">
+                <span>{service.anchorAction.label}</span>
+                <Icon name="arrow-up-right" size={13} />
               </a>
-            </footer>
-          </article>
-        ))
-      }
+            ) : null}
+          </div>
+
+          <h3 class="service-card__title">{service.title}</h3>
+          <p class="service-card__stack font-mono">{service.subtitle}</p>
+          <p class="service-card__summary">{service.summary}</p>
+
+          <ul class="service-card__list" role="list">
+            {service.deliverables.map((item) => (
+              <li>
+                <Icon name="check" size={15} class="service-card__check" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+
+          <div class="service-card__cta-row">
+            <a
+              href="#contacto"
+              class="btn btn-secondary btn-sm"
+              data-prefill-service={service.title}
+              data-prefill-note={`Hola NeuralJIRA, me gustaría cotizar el servicio de ${service.title} para mi negocio.`}
+            >
+              <span>{service.cta}</span>
+              <Icon name="arrow-right" size={14} />
+            </a>
+            <a
+              href={waUrl(`Hola NeuralJIRA, quiero cotizar: ${service.title}.`)}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-ghost btn-sm"
+              aria-label={`Cotizar ${service.title} por WhatsApp`}
+            >
+              <Icon name="whatsapp" size={14} />
+              <span>WhatsApp</span>
+            </a>
+          </div>
+        </article>
+      ))}
     </div>
 
-    <!-- Banner de Confianza y Calidad -->
-    <div class="services-trust-banner">
-      <div class="trust-item">
-        <span class="trust-icon">🛡️</span>
+    <!-- Interactive Proof for WhatsApp AI Automation -->
+    <div id="simulador-whatsapp" class="bot-proof-block">
+      <div class="bot-proof-block__copy">
+        <p class="eyebrow">Demo Interactiva · Automatización IA</p>
+        <h3>Prueba cómo atiende un bot comercial antes de cotizarlo.</h3>
+        <p>
+          Toca cualquiera de las consultas del simulador para comprobar el tiempo de respuesta,
+          la calificación automática del cliente y el traspaso inmediato a tu equipo.
+        </p>
+        <ul class="bot-proof-block__bullets" role="list">
+          <li><Icon name="check" size={15} class="service-card__check" /> <span>Entrenado con tus productos, servicios y políticas reales.</span></li>
+          <li><Icon name="check" size={15} class="service-card__check" /> <span>Integración oficial con WhatsApp Cloud API.</span></li>
+          <li><Icon name="check" size={15} class="service-card__check" /> <span>Derivación instantánea a un asesor humano cuando el cliente está listo.</span></li>
+        </ul>
+      </div>
+
+      <WhatsAppBotDemo />
+    </div>
+
+    <!-- Commercial Guarantees -->
+    <div class="guarantees-bar">
+      <div class="guarantee-item">
+        <span class="guarantee-item__icon"><Icon name="shield-check" size={20} /></span>
         <div>
-          <strong>Garantía de 30 Días</strong>
-          <p>Soporte técnico y ajustes posteriores al lanzamiento incluidos sin costo adicional.</p>
+          <strong>Garantía de 30 días</strong>
+          <p>Soporte post-lanzamiento y ajustes incluidos sin costo adicional.</p>
         </div>
       </div>
-      <div class="trust-item">
-        <span class="trust-icon">📜</span>
+      <div class="guarantee-item">
+        <span class="guarantee-item__icon"><Icon name="file-text" size={20} /></span>
         <div>
-          <strong>Propiedad Intelectual Total</strong>
-          <p>El código, accesos y dominio quedan 100% a nombre de tu empresa.</p>
+          <strong>Propiedad intelectual total</strong>
+          <p>Código fuente, dominio y accesos quedan 100% a nombre de tu empresa.</p>
         </div>
       </div>
-      <div class="trust-item">
-        <span class="trust-icon">🧾</span>
+      <div class="guarantee-item">
+        <span class="guarantee-item__icon"><Icon name="receipt" size={20} /></span>
         <div>
-          <strong>Formalidad y Facturación</strong>
-          <p>Contrato de prestación de servicios y facturación electrónica DIAN.</p>
+          <strong>Contrato formal y DIAN</strong>
+          <p>Cotización a medida por escrito y facturación electrónica legal en Colombia.</p>
         </div>
       </div>
     </div>
@@ -168,279 +229,191 @@ const services = [
 </section>
 
 <style>
-  .services {
-    background: var(--ink);
-    padding: var(--spacing-xl) 0;
-    position: relative;
-  }
-
-  .section-header {
-    text-align: center;
-    margin-bottom: var(--spacing-xl);
-  }
-
-  .badge-wrapper {
-    margin-bottom: var(--spacing-sm);
-  }
-
-  .badge {
-    display: inline-block;
-    padding: 0.35rem 1rem;
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    color: var(--accent);
-    background: rgba(249, 115, 22, 0.1);
-    border: 1px solid rgba(249, 115, 22, 0.3);
-    border-radius: 9999px;
-  }
-
-  .section-title {
-    font-size: clamp(2rem, 4vw, 2.85rem);
-    line-height: 1.2;
-    margin-bottom: var(--spacing-sm);
-    color: var(--white);
-  }
-
-  .text-gradient {
-    background: linear-gradient(135deg, var(--accent) 0%, var(--electric) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  .section-subtitle {
-    max-width: 720px;
-    margin: 0 auto;
-    font-size: 1.05rem;
-    color: var(--muted);
-    line-height: 1.6;
-  }
-
   .services-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-    gap: 2rem;
-    margin-bottom: 3.5rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+    margin-block-end: 2.5rem;
   }
 
   .service-card {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 2.2rem;
+    padding: 1.75rem;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s, box-shadow 0.3s;
-    position: relative;
-    overflow: hidden;
+    gap: 0.75rem;
   }
 
-  .service-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--accent), var(--electric));
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-
-  .service-card:hover {
-    transform: translateY(-5px);
-    border-color: rgba(249, 115, 22, 0.5);
-    box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.5);
-  }
-
-  .service-card:hover::before {
-    opacity: 1;
-  }
-
-  .service-card-header {
-    margin-bottom: 1.25rem;
-  }
-
-  .icon-and-badge {
+  .service-card__top {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-block-end: 0.25rem;
   }
 
-  .service-icon {
-    font-size: 2.2rem;
-  }
-
-  .service-chip {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    padding: 0.25rem 0.65rem;
-    background: rgba(56, 189, 248, 0.1);
-    color: var(--electric);
-    border: 1px solid rgba(56, 189, 248, 0.25);
-    border-radius: 999px;
-    font-weight: 600;
-  }
-
-  .service-title {
-    font-size: 1.35rem;
-    font-weight: 700;
-    color: var(--white);
-    margin-bottom: 0.35rem;
-    line-height: 1.3;
-  }
-
-  .service-subtitle {
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    color: var(--accent);
-    margin-bottom: 0;
-  }
-
-  .service-description {
-    color: var(--text);
-    font-size: 0.92rem;
-    line-height: 1.6;
-    margin-bottom: 1.5rem;
-  }
-
-  .service-deliverables {
-    background: rgba(11, 15, 26, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+  .service-card__icon {
+    inline-size: 2.65rem;
+    block-size: 2.65rem;
     border-radius: var(--radius-md);
-    padding: 1.25rem;
-    margin-bottom: 1.75rem;
-    flex-grow: 1;
-  }
-
-  .deliverables-heading {
-    font-size: 0.8rem;
-    font-family: var(--font-mono);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--light);
-    margin-bottom: 0.75rem;
-  }
-
-  .deliverables-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.55rem;
-  }
-
-  .deliverables-list li {
-    font-size: 0.85rem;
-    color: var(--text);
-    display: flex;
-    align-items: flex-start;
-    gap: 0.55rem;
-    line-height: 1.45;
-  }
-
-  .check-icon {
-    color: var(--green);
-    font-weight: 700;
-    font-size: 0.9rem;
-    flex-shrink: 0;
-  }
-
-  .service-card-footer {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--border);
-  }
-
-  .service-metric {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .metric-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--green);
-    box-shadow: 0 0 8px var(--green);
-  }
-
-  .metric-text {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: var(--muted);
-  }
-
-  .service-cta-btn {
+    background: var(--brand-accent-soft);
+    color: var(--brand-accent);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.25rem;
-    background: transparent;
-    color: var(--white);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
+  }
+
+  .service-card__demo-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.74rem;
     font-weight: 600;
-    font-size: 0.88rem;
-    text-decoration: none;
-    transition: all 0.25s;
+    color: var(--brand-secondary);
+    padding: 0.32rem 0.65rem;
+    min-block-size: 2rem;
+    border-radius: var(--radius-sm);
+    background: var(--brand-secondary-soft);
+    border: 1px solid var(--brand-secondary-border);
+    transition: border-color 150ms ease, background-color 150ms ease;
   }
 
-  .service-cta-btn:hover {
-    background: var(--accent);
-    color: var(--ink);
-    border-color: var(--accent);
+  .service-card__demo-btn:hover {
+    border-color: var(--brand-secondary);
+    background: color-mix(in oklab, var(--brand-secondary) 18%, transparent);
   }
 
-  .service-cta-btn span {
-    transition: transform 0.2s;
+  .service-card__title {
+    font-size: 1.25rem;
   }
 
-  .service-cta-btn:hover span {
-    transform: translateX(4px);
+  .service-card__stack {
+    font-size: 0.74rem;
+    color: var(--text-muted);
   }
 
-  /* Trust Banner */
-  .services-trust-banner {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 2rem;
+  .service-card__summary {
+    font-size: 0.93rem;
+    line-height: 1.6;
   }
 
-  .trust-item {
+  .service-card__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-subtle);
+    flex: 1;
+    margin-block: 0.35rem;
+  }
+
+  .service-card__list li {
     display: flex;
     align-items: flex-start;
-    gap: 1rem;
+    gap: 0.55rem;
+    font-size: 0.86rem;
+    color: var(--text-secondary);
+    line-height: 1.45;
   }
 
-  .trust-icon {
-    font-size: 1.8rem;
+  .service-card__check {
+    color: var(--status-success);
+    margin-block-start: 0.15rem;
+  }
+
+  .service-card__cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    padding-block-start: 0.6rem;
+    border-block-start: 1px solid var(--border-subtle);
+  }
+
+  .bot-proof-block {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    gap: 2rem;
+    align-items: center;
+    padding: clamp(1.5rem, 1.2rem + 1.5vw, 2.5rem);
+    background: var(--surface-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+    margin-block-end: 2rem;
+  }
+
+  .bot-proof-block__copy {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .bot-proof-block__copy h3 {
+    font-size: var(--text-2xl);
+  }
+
+  .bot-proof-block__bullets {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-block-start: 0.25rem;
+  }
+
+  .bot-proof-block__bullets li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+  }
+
+  .guarantees-bar {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
+    padding: 1.5rem 1.75rem;
+    background: var(--surface-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+  }
+
+  .guarantee-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+  }
+
+  .guarantee-item__icon {
+    inline-size: 2.35rem;
+    block-size: 2.35rem;
+    border-radius: var(--radius-md);
+    background: var(--surface-subtle);
+    color: var(--brand-accent);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     flex-shrink: 0;
   }
 
-  .trust-item strong {
+  .guarantee-item strong {
     display: block;
-    color: var(--white);
-    font-size: 0.95rem;
-    margin-bottom: 0.25rem;
+    font-size: 0.94rem;
+    color: var(--text-primary);
+    margin-block-end: 0.2rem;
   }
 
-  .trust-item p {
-    color: var(--muted);
-    font-size: 0.82rem;
-    line-height: 1.45;
-    margin: 0;
+  .guarantee-item p {
+    font-size: 0.84rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+  }
+
+  @media (max-width: 900px) {
+    .services-grid,
+    .bot-proof-block,
+    .guarantees-bar {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

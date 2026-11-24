@@ -1,0 +1,358 @@
+---
+import { getCollection, render } from 'astro:content';
+import { Image } from 'astro:assets';
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import Icon from '../../components/Icon.astro';
+import WarehousePreview from '../../components/demos/WarehousePreview.astro';
+import KdsPreview from '../../components/demos/KdsPreview.astro';
+import { SITE, waUrl } from '../../config/site';
+
+export async function getStaticPaths() {
+  const products = await getCollection('products');
+  return products.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const p = entry.data;
+const { Content } = await render(entry);
+
+const productSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: p.title,
+  applicationCategory: p.categoryLabel,
+  description: p.summary,
+  creator: {
+    '@type': 'Organization',
+    name: SITE.name,
+    url: SITE.url,
+  },
+  ...(p.liveUrl ? { url: p.liveUrl } : {}),
+};
+---
+
+<Layout
+  title={`${p.title} — Caso de Estudio | ${SITE.name}`}
+  description={p.summary}
+  schemaExtra={productSchema}
+>
+  <Header />
+  <main class="section case-page">
+    <div class="container">
+      <nav class="breadcrumb font-mono" aria-label="Ruta de navegación">
+        <a href="/">Inicio</a>
+        <span aria-hidden="true">/</span>
+        <a href="/#proyectos">Proyectos</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">{p.title}</span>
+      </nav>
+
+      <header class="case-header">
+        <div class="case-header__meta">
+          <span class="pill pill--accent">{p.categoryLabel}</span>
+          <span class="pill pill--success">{p.status}</span>
+          <span class="case-client">{p.client}</span>
+        </div>
+
+        <h1 id="contenido-principal" tabindex="-1">{p.title}</h1>
+        <p class="case-tagline">{p.tagline}</p>
+
+        <div class="case-actions">
+          {p.liveUrl && (
+            <a
+              href={p.liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-primary"
+            >
+              <span>Abrir sitio / demo en vivo</span>
+              <Icon name="external-link" size={16} />
+            </a>
+          )}
+          <a
+            href={waUrl(`Hola NeuralJIRA, vi el caso de estudio de ${p.title} y quiero cotizar una solución similar.`)}
+            target="_blank"
+            rel="noopener noreferrer"
+            class:list={['btn', p.liveUrl ? 'btn-secondary' : 'btn-primary']}
+          >
+            <Icon name="whatsapp" size={16} />
+            <span>Cotizar solución similar</span>
+          </a>
+          <a href="/#proyectos" class="btn btn-ghost">
+            <span>Volver a proyectos</span>
+          </a>
+        </div>
+      </header>
+
+      <!-- Full Visual / Interactive Proof Stage -->
+      <div class="case-stage">
+        {p.screenshot ? (
+          <div class="surface-card case-screenshot-card">
+            <div class="case-screenshot-bar font-mono">
+              <span>{p.liveUrl ? new URL(p.liveUrl).hostname : p.title}</span>
+              <span>Captura real en producción</span>
+            </div>
+            <Image
+              src={p.screenshot}
+              alt={p.screenshotAlt ?? `Captura de pantalla de ${p.title}`}
+              widths={[720, 1280]}
+              sizes="(max-width: 960px) 94vw, 1100px"
+              format="webp"
+              quality={85}
+              fetchpriority="high"
+              loading="eager"
+              class="case-screenshot-img"
+            />
+          </div>
+        ) : p.interactiveWidget === 'warehouse' ? (
+          <WarehousePreview uid="detail-wh" />
+        ) : (
+          <KdsPreview uid="detail-kds" />
+        )}
+      </div>
+
+      <!-- KPI Strip -->
+      <dl class="case-metrics">
+        {p.metrics.map((m) => (
+          <div class="surface-card case-metric-card">
+            <dt>{m.label}</dt>
+            <dd class="tabular-nums font-mono">{m.value}</dd>
+          </div>
+        ))}
+      </dl>
+
+      <!-- Problem / Solution / Results Grid -->
+      <div class="case-pillars">
+        <article class="surface-card case-pillar">
+          <h2>El reto comercial</h2>
+          <p>{p.problem}</p>
+        </article>
+        <article class="surface-card case-pillar">
+          <h2>La solución diseñada</h2>
+          <p>{p.solution}</p>
+        </article>
+        <article class="surface-card case-pillar">
+          <h2>Resultados clave</h2>
+          <ul role="list" class="case-results">
+            {p.results.map((r) => (
+              <li>
+                <Icon name="check" size={15} class="case-check" />
+                <span>{r}</span>
+              </li>
+            ))}
+          </ul>
+        </article>
+      </div>
+
+      <!-- Detailed Architecture Notes + Stack -->
+      <div class="case-details-grid">
+        <article class="prose case-prose">
+          <Content />
+        </article>
+
+        <aside class="surface-card case-sidebar">
+          <h3>Tecnologías aplicadas</h3>
+          <ul role="list" class="case-stack">
+            {p.stack.map((tech) => (
+              <li class="pill">{tech}</li>
+            ))}
+          </ul>
+
+          <div class="case-sidebar__cta">
+            <strong>¿Necesitas algo similar?</strong>
+            <p>Agendamos un diagnóstico técnico de 15 minutos sin costo para evaluar tu caso.</p>
+            <a href="/#contacto" class="btn btn-primary btn-sm">
+              <span>Ir al formulario de contacto</span>
+              <Icon name="arrow-right" size={14} />
+            </a>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-block-end: 1.5rem;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--brand-accent);
+  }
+
+  .case-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    max-inline-size: 52rem;
+    margin-block-end: 2.25rem;
+  }
+
+  .case-header__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .case-client {
+    font-size: 0.84rem;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .case-tagline {
+    font-size: var(--text-xl);
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .case-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-block-start: 0.5rem;
+  }
+
+  .case-stage {
+    margin-block-end: 2rem;
+  }
+
+  .case-screenshot-card {
+    overflow: hidden;
+  }
+
+  .case-screenshot-bar {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.65rem 1rem;
+    font-size: 0.76rem;
+    color: var(--text-muted);
+    background: var(--surface-subtle);
+    border-block-end: 1px solid var(--border-subtle);
+  }
+
+  .case-screenshot-img {
+    inline-size: 100%;
+    block-size: auto;
+  }
+
+  .case-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    margin: 0 0 2rem;
+  }
+
+  .case-metric-card {
+    padding: 1.25rem 1.4rem;
+  }
+
+  .case-metric-card dt {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-block-end: 0.25rem;
+  }
+
+  .case-metric-card dd {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .case-pillars {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+    margin-block-end: 2.5rem;
+  }
+
+  .case-pillar {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .case-pillar h2 {
+    font-size: 1.15rem;
+  }
+
+  .case-pillar p {
+    font-size: 0.92rem;
+    line-height: 1.6;
+  }
+
+  .case-results {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .case-results li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+  }
+
+  .case-check {
+    color: var(--status-success);
+    margin-block-start: 0.15rem;
+  }
+
+  .case-details-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 0.9fr);
+    gap: 2.5rem;
+    align-items: start;
+  }
+
+  .case-sidebar {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .case-sidebar h3 {
+    font-size: 1.05rem;
+  }
+
+  .case-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+
+  .case-sidebar__cta {
+    padding-block-start: 1.25rem;
+    border-block-start: 1px solid var(--border-subtle);
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    font-size: 0.88rem;
+  }
+
+  @media (max-width: 860px) {
+    .case-metrics,
+    .case-pillars,
+    .case-details-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

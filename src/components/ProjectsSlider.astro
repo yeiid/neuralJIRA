@@ -1,0 +1,910 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import WarehousePreview from './demos/WarehousePreview.astro';
+import KdsPreview from './demos/KdsPreview.astro';
+
+const products = (await getCollection('products')).sort((a, b) => a.data.order - b.data.order);
+const total = products.length;
+---
+
+<section id="proyectos" class="section projects-slider-section">
+  <div class="container">
+    <div class="section-head section-head--split">
+      <div>
+        <p class="eyebrow">Portafolio &amp; Demos</p>
+        <h2>Proyectos reales que puedes explorar y probar.</h2>
+        <p class="section-lead">
+          Desliza para recorrer nuestras landing pages, tiendas online y sistemas a medida.
+          Abre las demos en vivo o interactúa directamente con cada vista.
+        </p>
+      </div>
+
+      <!-- Accessible Carousel Controls placed before track in DOM order -->
+      <div class="slider-controls">
+        <span class="slider-counter font-mono tabular-nums" id="projects-slider-counter">
+          01 / {String(total).padStart(2, '0')}
+        </span>
+        <div class="slider-arrows" role="group" aria-label="Controles del carrusel de proyectos">
+          <button
+            type="button"
+            class="slider-arrow-btn"
+            data-slider-dir="previous"
+            aria-label="Proyecto anterior"
+          >
+            <Icon name="chevron-left" size={18} />
+          </button>
+          <button
+            type="button"
+            class="slider-arrow-btn"
+            data-slider-dir="next"
+            aria-label="Proyecto siguiente"
+          >
+            <Icon name="chevron-right" size={18} />
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Accessible Scroll-Snap Carousel -->
+    <div
+      class="carousel"
+      id="projects-carousel"
+      role="region"
+      aria-roledescription="carrusel"
+      aria-label="Proyectos y demos en producción"
+    >
+      <div class="carousel-track" id="projects-track" tabindex="0" role="group" aria-label="Diapositivas de proyectos">
+        {products.map((entry, idx) => {
+          const p = entry.data;
+          const slug = entry.id;
+          return (
+            <article
+              class="surface-card slide-card"
+              role="group"
+              aria-roledescription="diapositiva"
+              aria-label={`${idx + 1} de ${total}: ${p.title}`}
+              data-slide-index={idx}
+              data-marker-name={`Ir al proyecto ${idx + 1}: ${p.title}`}
+            >
+              <!-- Uniform Visual / Interactive Stage -->
+              <div class="slide-card__media">
+                {p.screenshot ? (
+                  <div class="slide-frame">
+                    <div class="slide-frame__bar">
+                      <span class="slide-frame__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                      <span class="slide-frame__host font-mono">
+                        {p.liveUrl ? new URL(p.liveUrl).hostname : p.title.toLowerCase()}
+                      </span>
+                      <span class="pill pill--success">{p.status}</span>
+                    </div>
+                    <div class="slide-frame__img-wrap">
+                      <Image
+                        src={p.screenshot}
+                        alt={p.screenshotAlt ?? `Captura de pantalla del proyecto ${p.title}`}
+                        widths={[600, 960]}
+                        sizes="(max-width: 900px) 92vw, 560px"
+                        format="webp"
+                        quality={82}
+                        loading="lazy"
+                        class="slide-frame__img"
+                      />
+                    </div>
+                  </div>
+                ) : p.interactiveWidget === 'warehouse' ? (
+                  <div class="slide-widget-wrap">
+                    <WarehousePreview compact uid={`slide-wh-${slug}`} />
+                  </div>
+                ) : (
+                  <div class="slide-widget-wrap">
+                    <KdsPreview compact uid={`slide-kds-${slug}`} />
+                  </div>
+                )}
+              </div>
+
+              <!-- Uniform Case Content -->
+              <div class="slide-card__body">
+                <div class="slide-card__meta">
+                  <span class="pill pill--accent">{p.categoryLabel}</span>
+                  <span class="slide-card__client">{p.client}</span>
+                </div>
+
+                <h3 class="slide-card__title">
+                  <a href={`/productos/${slug}`} class="slide-card__title-link">
+                    {p.title}
+                  </a>
+                </h3>
+                <p class="slide-card__tagline">{p.tagline}</p>
+
+                <div class="slide-card__narrative">
+                  <p><strong>Reto:</strong> {p.problem}</p>
+                  <p><strong>Solución:</strong> {p.solution}</p>
+                </div>
+
+                <dl class="slide-card__metrics">
+                  {p.metrics.map((m) => (
+                    <div>
+                      <dt>{m.label}</dt>
+                      <dd class="tabular-nums font-mono">{m.value}</dd>
+                    </div>
+                  ))}
+                </dl>
+
+                <div class="slide-card__actions">
+                  {p.embedDemo && p.liveUrl ? (
+                    <button
+                      type="button"
+                      class="btn btn-primary btn-sm"
+                      data-open-sandbox
+                      data-sandbox-title={`${p.title} — ${p.categoryLabel}`}
+                      data-sandbox-url={p.liveUrl}
+                      data-sandbox-service={p.serviceInterest}
+                    >
+                      <Icon name="play" size={14} />
+                      <span>Probar demo en vivo</span>
+                    </button>
+                  ) : (
+                    <a
+                      href="#contacto"
+                      class="btn btn-primary btn-sm"
+                      data-prefill-service={p.serviceInterest}
+                      data-prefill-note={`Hola, vi el proyecto ${p.title} en su sitio y quiero cotizar una solución similar.`}
+                    >
+                      <span>Solicitar demo privada</span>
+                      <Icon name="arrow-right" size={14} />
+                    </a>
+                  )}
+
+                  <a href={`/productos/${slug}`} class="btn btn-ghost btn-sm">
+                    <span>Ver detalles</span>
+                    <Icon name="arrow-up-right" size={14} />
+                  </a>
+                </div>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+
+      <!-- Polite status announcer (stays silent on initial load) -->
+      <p class="visually-hidden" id="projects-slider-status" role="status" aria-live="polite"></p>
+
+      <!-- Direct Slide Marker Buttons (non-color active state + >= 24x24px target size) -->
+      <nav class="carousel-markers" aria-label="Elegir proyecto">
+        {products.map((entry, idx) => (
+          <button
+            type="button"
+            class="carousel-marker"
+            data-marker-index={idx}
+            aria-label={`Ir al proyecto ${idx + 1} de ${total}: ${entry.data.title}`}
+            aria-current={idx === 0 ? 'true' : undefined}
+          >
+            <span class="carousel-marker__dot" aria-hidden="true"></span>
+          </button>
+        ))}
+      </nav>
+    </div>
+  </div>
+
+  <!-- Native Accessible <dialog> Live Demo Sandbox -->
+  <dialog id="demo-sandbox-dialog" class="sandbox-dialog" closedby="any" aria-labelledby="sandbox-dialog-title">
+    <div class="sandbox-dialog__header">
+      <div class="sandbox-dialog__title-group">
+        <span class="pill pill--success">Demo en vivo</span>
+        <h1 id="sandbox-dialog-title" class="sandbox-dialog__title">Vista previa del proyecto</h1>
+      </div>
+
+      <div class="sandbox-dialog__tools">
+        <div class="viewport-switch" role="group" aria-label="Tamaño de vista previa">
+          <button
+            type="button"
+            class="vp-btn is-active"
+            data-sandbox-vp="desktop"
+            aria-pressed="true"
+            aria-label="Vista escritorio"
+          >
+            <Icon name="laptop" size={15} />
+            <span>Escritorio</span>
+          </button>
+          <button
+            type="button"
+            class="vp-btn"
+            data-sandbox-vp="mobile"
+            aria-pressed="false"
+            aria-label="Vista móvil"
+          >
+            <Icon name="smartphone" size={15} />
+            <span>Móvil</span>
+          </button>
+        </div>
+
+        <a
+          id="sandbox-external-link"
+          href="#"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn btn-ghost btn-sm"
+        >
+          <span>Abrir aparte</span>
+          <Icon name="external-link" size={14} />
+        </a>
+
+        <form method="dialog">
+          <button
+            type="submit"
+            class="sandbox-close-btn"
+            id="sandbox-close-btn"
+            aria-label="Cerrar visor de demo"
+            autofocus
+          >
+            <Icon name="x" size={18} />
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div class="sandbox-dialog__stage" id="sandbox-stage">
+      <div class="sandbox-loading" id="sandbox-loading">
+        Cargando entorno interactivo en vivo…
+      </div>
+      <iframe
+        id="sandbox-iframe"
+        title="Entorno interactivo del proyecto en vivo"
+        class="sandbox-iframe"
+        loading="lazy"
+        sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+      ></iframe>
+    </div>
+
+    <div class="sandbox-dialog__footer">
+      <p>¿Quieres un proyecto con esta calidad y velocidad para tu negocio?</p>
+      <button type="button" class="btn btn-primary btn-sm" id="sandbox-quote-btn">
+        <span>Cotizar proyecto similar</span>
+        <Icon name="arrow-right" size={14} />
+      </button>
+    </div>
+  </dialog>
+</section>
+
+<script>
+  // ── Scroll-Snap Carousel Controller (per Modern Web Guidance carousel spec) ──
+  const track = document.getElementById('projects-track') as HTMLElement | null;
+  const counterEl = document.getElementById('projects-slider-counter');
+  const statusEl = document.getElementById('projects-slider-status');
+  const prevBtn = document.querySelector<HTMLButtonElement>('[data-slider-dir="previous"]');
+  const nextBtn = document.querySelector<HTMLButtonElement>('[data-slider-dir="next"]');
+  const markers = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-marker-index]'));
+
+  if (track) {
+    const slides = Array.from(track.querySelectorAll<HTMLElement>('[data-slide-index]'));
+    const total = slides.length;
+    let settledIndex = 0;
+    let liveIndex = 0;
+    let pendingTarget: number | null = null;
+    let rafId = 0;
+    let scrollDebounce: number | undefined;
+    let hasUserInteracted = false;
+
+    const prefersReducedMotion = () =>
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function getNearestIndex(): number {
+      const center = track!.scrollLeft + track!.clientWidth / 2;
+      let best = 0;
+      let bestDist = Infinity;
+      for (let i = 0; i < slides.length; i++) {
+        const slideCenter = slides[i].offsetLeft + slides[i].offsetWidth / 2;
+        const dist = Math.abs(slideCenter - center);
+        if (dist < bestDist) {
+          bestDist = dist;
+          best = i;
+        }
+      }
+      return best;
+    }
+
+    function updateMarkers(activeIdx: number) {
+      if (liveIndex === activeIdx && counterEl?.dataset.idx === String(activeIdx)) return;
+      liveIndex = activeIdx;
+      markers.forEach((btn, idx) => {
+        if (idx === activeIdx) {
+          btn.setAttribute('aria-current', 'true');
+        } else {
+          btn.removeAttribute('aria-current');
+        }
+      });
+      if (counterEl) {
+        counterEl.dataset.idx = String(activeIdx);
+        counterEl.textContent = `${String(activeIdx + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
+      }
+    }
+
+    function scrollToSlide(targetIdx: number) {
+      const wrapped = ((targetIdx % total) + total) % total;
+      const slide = slides[wrapped];
+      if (!slide) return;
+      hasUserInteracted = true;
+      pendingTarget = wrapped;
+      updateMarkers(wrapped);
+      const targetLeft = slide.offsetLeft - (track!.clientWidth - slide.offsetWidth) / 2;
+      track!.scrollTo({
+        left: targetLeft,
+        behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+      });
+      if (prefersReducedMotion()) {
+        onSettle();
+      }
+    }
+
+    function onSettle() {
+      const current = getNearestIndex();
+      pendingTarget = null;
+      updateMarkers(current);
+      if (current !== settledIndex) {
+        settledIndex = current;
+        if (hasUserInteracted && statusEl) {
+          const label = slides[current]?.getAttribute('aria-label') ?? `Proyecto ${current + 1} de ${total}`;
+          statusEl.textContent = `Mostrando ${label}`;
+        }
+      }
+    }
+
+    prevBtn?.addEventListener('click', () => {
+      const base = pendingTarget ?? getNearestIndex();
+      scrollToSlide(base - 1);
+    });
+
+    nextBtn?.addEventListener('click', () => {
+      const base = pendingTarget ?? getNearestIndex();
+      scrollToSlide(base + 1);
+    });
+
+    markers.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const idx = Number(btn.dataset.markerIndex ?? 0);
+        scrollToSlide(idx);
+      });
+    });
+
+    track.addEventListener(
+      'scroll',
+      () => {
+        hasUserInteracted = true;
+        if (pendingTarget === null && !rafId) {
+          rafId = requestAnimationFrame(() => {
+            rafId = 0;
+            updateMarkers(getNearestIndex());
+          });
+        }
+        // Fallback settle detection only when scrollend is unsupported
+        if (!('onscrollend' in window)) {
+          window.clearTimeout(scrollDebounce);
+          scrollDebounce = window.setTimeout(onSettle, 140);
+        }
+      },
+      { passive: true },
+    );
+
+    if ('onscrollend' in window) {
+      track.addEventListener('scrollend', onSettle, { passive: true });
+    }
+
+    // Initial silent marker sync on load
+    updateMarkers(0);
+  }
+
+  // ── Native <dialog> Live Demo Sandbox ──
+  const dialog = document.getElementById('demo-sandbox-dialog') as HTMLDialogElement | null;
+  const titleEl = document.getElementById('sandbox-dialog-title');
+  const extLink = document.getElementById('sandbox-external-link') as HTMLAnchorElement | null;
+  const iframe = document.getElementById('sandbox-iframe') as HTMLIFrameElement | null;
+  const stage = document.getElementById('sandbox-stage');
+  const loadingEl = document.getElementById('sandbox-loading');
+  const quoteBtn = document.getElementById('sandbox-quote-btn');
+
+  let activeSandboxService = 'Landing Pages & Sitios Web';
+  let activeSandboxProduct = '';
+
+  function openSandbox(title: string, url: string, service: string) {
+    if (!dialog || !iframe) return;
+    activeSandboxProduct = title;
+    activeSandboxService = service;
+    if (titleEl) titleEl.textContent = title;
+    if (extLink) extLink.href = url;
+    if (loadingEl) loadingEl.hidden = false;
+    stage?.classList.remove('is-mobile');
+    document.querySelectorAll<HTMLButtonElement>('[data-sandbox-vp]').forEach((b) => {
+      const isDesktop = b.dataset.sandboxVp === 'desktop';
+      b.classList.toggle('is-active', isDesktop);
+      b.setAttribute('aria-pressed', String(isDesktop));
+    });
+    iframe.title = `Demo interactiva de ${title}`;
+    iframe.src = url;
+    dialog.showModal();
+  }
+
+  iframe?.addEventListener('load', () => {
+    if (loadingEl) loadingEl.hidden = true;
+  });
+
+  document.querySelectorAll<HTMLElement>('[data-open-sandbox]').forEach((trigger) => {
+    trigger.addEventListener('click', () => {
+      const title = trigger.dataset.sandboxTitle ?? 'Demo de Proyecto';
+      const url = trigger.dataset.sandboxUrl;
+      const service = trigger.dataset.sandboxService ?? 'Landing Pages & Sitios Web';
+      if (url) openSandbox(title, url, service);
+    });
+  });
+
+  dialog?.addEventListener('close', () => {
+    dialog.returnValue = '';
+    if (iframe) iframe.src = 'about:blank';
+  });
+
+  // Progressive fallback for closedby="any" where unsupported
+  if (dialog && !('closedBy' in HTMLDialogElement.prototype)) {
+    const outside = (e: PointerEvent, el: HTMLDialogElement) => {
+      const r = el.getBoundingClientRect();
+      return e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom;
+    };
+    let pressedOutside = false;
+    dialog.addEventListener('pointerdown', (e) => {
+      pressedOutside = outside(e, dialog);
+    });
+    dialog.addEventListener('pointerup', (e) => {
+      if (pressedOutside && outside(e, dialog)) dialog.close();
+    });
+  }
+
+  document.querySelectorAll<HTMLButtonElement>('[data-sandbox-vp]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const isMobile = btn.dataset.sandboxVp === 'mobile';
+      stage?.classList.toggle('is-mobile', isMobile);
+      document.querySelectorAll<HTMLButtonElement>('[data-sandbox-vp]').forEach((b) => {
+        const active = b === btn;
+        b.classList.toggle('is-active', active);
+        b.setAttribute('aria-pressed', String(active));
+      });
+    });
+  });
+
+  // Contextual Quote Handoff
+  function prefillContact(service: string, note: string) {
+    const select = document.getElementById('contact-service') as HTMLSelectElement | null;
+    const msg = document.getElementById('message') as HTMLTextAreaElement | null;
+    if (select) {
+      const match = Array.from(select.options).find((o) => o.value === service || o.text === service);
+      if (match) select.value = match.value;
+    }
+    if (msg && note) {
+      msg.value = note;
+    }
+    document.getElementById('contacto')?.scrollIntoView({ behavior: 'smooth' });
+    setTimeout(() => (document.getElementById('name') as HTMLInputElement | null)?.focus(), 400);
+  }
+
+  quoteBtn?.addEventListener('click', () => {
+    dialog?.close();
+    prefillContact(
+      activeSandboxService,
+      `Hola, estuve probando la demo de ${activeSandboxProduct} y me gustaría cotizar una solución similar.`,
+    );
+  });
+
+  document.querySelectorAll<HTMLElement>('[data-prefill-service]').forEach((el) => {
+    el.addEventListener('click', (e) => {
+      const service = el.dataset.prefillService ?? '';
+      const note = el.dataset.prefillNote ?? '';
+      if (document.getElementById('contact-form')) {
+        e.preventDefault();
+        prefillContact(service, note);
+      }
+    });
+  });
+</script>
+
+<style>
+  .slider-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .slider-counter {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+
+  .slider-arrows {
+    display: inline-flex;
+    gap: 0.45rem;
+  }
+
+  .slider-arrow-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: 2.65rem;
+    min-block-size: 2.65rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-strong);
+    background: var(--surface-elevated);
+    color: var(--text-primary);
+    touch-action: manipulation;
+    transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease;
+  }
+
+  .slider-arrow-btn:hover {
+    border-color: var(--brand-accent);
+    color: var(--brand-accent);
+    background: var(--brand-accent-soft);
+  }
+
+  .carousel {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .carousel-track {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    touch-action: manipulation;
+    scrollbar-width: none;
+    padding-block: 0.25rem 0.5rem;
+  }
+
+  .carousel-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .carousel-track {
+      scroll-behavior: smooth;
+    }
+  }
+
+  /* Uniform Horizontal Slide Card */
+  .slide-card {
+    flex: 0 0 100%;
+    scroll-snap-align: center;
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    align-items: stretch;
+    overflow: hidden;
+  }
+
+  .slide-card__media {
+    background: var(--surface-inset);
+    border-inline-end: 1px solid var(--border-subtle);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-block-size: 20rem;
+  }
+
+  .slide-frame {
+    background: var(--surface-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .slide-frame__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-block-end: 1px solid var(--border-subtle);
+    background: var(--surface-subtle);
+  }
+
+  .slide-frame__dots {
+    display: inline-flex;
+    gap: 4px;
+  }
+  .slide-frame__dots i {
+    inline-size: 7px;
+    block-size: 7px;
+    border-radius: 50%;
+    background: var(--border-strong);
+    display: block;
+  }
+
+  .slide-frame__host {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+  }
+
+  .slide-frame__img-wrap {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+  }
+
+  .slide-frame__img {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    object-position: top center;
+  }
+
+  .slide-widget-wrap {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .slide-card__body {
+    padding: clamp(1.35rem, 1rem + 1vw, 2rem);
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .slide-card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .slide-card__client {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .slide-card__title {
+    font-size: clamp(1.3rem, 1.15rem + 0.5vw, 1.6rem);
+  }
+
+  .slide-card__title-link {
+    transition: color 150ms ease;
+  }
+
+  .slide-card__title-link:hover {
+    color: var(--brand-accent);
+  }
+
+  .slide-card__tagline {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .slide-card__narrative {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    font-size: 0.88rem;
+    line-height: 1.55;
+    flex: 1;
+  }
+
+  .slide-card__narrative strong {
+    color: var(--text-primary);
+  }
+
+  .slide-card__metrics {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.6rem;
+    padding: 0.75rem 0;
+    border-block: 1px solid var(--border-subtle);
+    margin: 0;
+  }
+
+  .slide-card__metrics dt {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-block-end: 0.1rem;
+  }
+
+  .slide-card__metrics dd {
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .slide-card__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    padding-block-start: 0.2rem;
+  }
+
+  /* Accessible Markers (>= 24x24px target + shape-based active affordance) */
+  .carousel-markers {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+  }
+
+  .carousel-marker {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: 28px;
+    min-block-size: 28px;
+    padding: 6px;
+    border-radius: var(--radius-pill);
+    touch-action: manipulation;
+  }
+
+  .carousel-marker__dot {
+    display: block;
+    inline-size: 9px;
+    block-size: 9px;
+    border-radius: var(--radius-pill);
+    background: var(--border-strong);
+    transition: inline-size 200ms var(--ease-out), background-color 150ms ease;
+  }
+
+  .carousel-marker:hover .carousel-marker__dot {
+    background: var(--text-muted);
+  }
+
+  .carousel-marker[aria-current="true"] .carousel-marker__dot {
+    inline-size: 28px;
+    background: var(--brand-accent);
+  }
+
+  /* Native Sandbox Dialog */
+  .sandbox-dialog[open] {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sandbox-dialog__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1.25rem;
+    padding: 0.9rem 1.25rem;
+    background: var(--surface-subtle);
+    border-block-end: 1px solid var(--border-subtle);
+  }
+
+  .sandbox-dialog__title-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.65rem;
+  }
+
+  .sandbox-dialog__title {
+    font-size: 1rem;
+  }
+
+  .sandbox-dialog__tools {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .viewport-switch {
+    display: inline-flex;
+    padding: 0.2rem;
+    border-radius: var(--radius-md);
+    background: var(--surface-elevated);
+    border: 1px solid var(--border-subtle);
+    gap: 0.2rem;
+  }
+
+  .vp-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.32rem 0.65rem;
+    min-block-size: 2rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+
+  .vp-btn.is-active {
+    background: var(--surface-inverse);
+    color: var(--text-inverse);
+  }
+
+  .sandbox-close-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: 2.35rem;
+    min-block-size: 2.35rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle);
+    background: var(--surface-elevated);
+    color: var(--text-primary);
+  }
+
+  .sandbox-close-btn:hover {
+    border-color: var(--brand-accent);
+    color: var(--brand-accent);
+  }
+
+  .sandbox-dialog__stage {
+    position: relative;
+    flex: 1 1 auto;
+    min-block-size: 28rem;
+    block-size: 62dvh;
+    background: var(--surface-inset);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+
+  .sandbox-dialog__stage.is-mobile {
+    padding: 1rem;
+  }
+
+  .sandbox-loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    background: var(--surface-inset);
+    z-index: 1;
+  }
+
+  .sandbox-loading[hidden] {
+    display: none;
+  }
+
+  .sandbox-iframe {
+    inline-size: 100%;
+    block-size: 100%;
+    border: none;
+    background: #ffffff;
+    transition: max-inline-size 220ms var(--ease-out);
+  }
+
+  .sandbox-dialog__stage.is-mobile .sandbox-iframe {
+    max-inline-size: 24.5rem;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+  }
+
+  .sandbox-dialog__footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.85rem 1.25rem;
+    background: var(--surface-elevated);
+    border-block-start: 1px solid var(--border-subtle);
+    font-size: 0.88rem;
+  }
+
+  @media (max-width: 920px) {
+    .slide-card {
+      grid-template-columns: 1fr;
+    }
+
+    .slide-card__media {
+      border-inline-end: none;
+      border-block-end: 1px solid var(--border-subtle);
+      min-block-size: auto;
+    }
+  }
+</style>

@@ -1,0 +1,262 @@
+---
+import Icon from './Icon.astro';
+import { SITE } from '../config/site';
+---
+
+<section id="nosotros" class="section about-section">
+  <div class="container about-grid">
+    <!-- Left Column: Company Identity & Dual-Impact Model -->
+    <div class="about-story">
+      <p class="eyebrow">Quiénes Somos · Modelo de Impacto Dual</p>
+      <h2>Ingeniería con rigor comercial y raíz territorial en Colombia.</h2>
+      <p class="about-lead">
+        NeuralJIRA es un estudio de ingeniería de software con operación en <strong>toda Colombia</strong>.
+        Nuestro modelo es transparente: los proyectos comerciales financian nuestra operación y nos
+        permiten sostener iniciativas gratuitas de tecnología abierta en comunidades que históricamente
+        han estado desconectadas.
+      </p>
+
+      <div class="principles-list">
+        <div class="principle-item">
+          <h3>Ingeniería sobria y mantenible</h3>
+          <p>
+            No vendemos cajas negras ni plantillas sobrecargadas. Entregamos software rápido,
+            claro y preparado para escalar junto con tu negocio.
+          </p>
+        </div>
+        <div class="principle-item">
+          <h3>Soberanía tecnológica real</h3>
+          <p>
+            Diseñamos sistemas <strong>Local-First</strong> y cloud eficientes que resisten cortes
+            de conectividad y operan sobre hardware accesible en cualquier región del país.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Technical Leadership & Engineering Standards -->
+    <div class="leadership-column">
+      <div class="surface-card founder-card">
+        <div class="founder-card__head">
+          <div class="founder-card__avatar" aria-hidden="true">YH</div>
+          <div>
+            <span class="pill pill--electric">Dirección Técnica</span>
+            <p class="founder-card__loc font-mono">
+              <Icon name="map-pin" size={12} />
+              <span>{SITE.location}</span>
+            </p>
+          </div>
+        </div>
+
+        <h3 class="founder-card__name">{SITE.founder}</h3>
+        <p class="founder-card__role">{SITE.founderRole}</p>
+        <p class="founder-card__bio">
+          Especializado en arquitectura de sistemas distribuidos, plataformas Local-First de alta
+          disponibilidad y automatización comercial con IA en producción.
+        </p>
+
+        <a
+          href={SITE.portfolioUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn btn-secondary btn-sm"
+        >
+          <span>Ver portafolio de arquitectura</span>
+          <Icon name="arrow-up-right" size={14} />
+        </a>
+      </div>
+
+      <!-- Progressive Disclosure Technical Stack Drawer (for CTOs / technical evaluators) -->
+      <details class="tech-drawer">
+        <summary class="tech-drawer__summary">
+          <span>Ficha de stack y estándares de ingeniería</span>
+          <Icon name="chevron-down" size={16} class="tech-drawer__chevron" />
+        </summary>
+        <div class="tech-drawer__content">
+          <p>Para equipos técnicos que evalúan nuestra arquitectura:</p>
+          <ul role="list" class="tech-drawer__specs font-mono">
+            <li><strong>Web &amp; 3D / GIS:</strong> Astro 5 · TypeScript · Three.js · MapLibre GL · PostGIS</li>
+            <li><strong>Backend &amp; Tiempo Real:</strong> Go 1.24 · FastAPI · Fastify 5 · Socket.io · Ed25519</li>
+            <li><strong>Datos &amp; Edge:</strong> PostgreSQL · SQLite WAL · Rust (sync-lan) · OpenWrt · Docker/Nginx</li>
+          </ul>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.9fr);
+    gap: clamp(2rem, 1.5rem + 2.5vw, 3.75rem);
+    align-items: start;
+  }
+
+  .about-story {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .about-lead {
+    font-size: 1.04rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    max-inline-size: 60ch;
+  }
+
+  .about-lead strong {
+    color: var(--text-primary);
+  }
+
+  .principles-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    padding-block-start: 1.25rem;
+    border-block-start: 1px solid var(--border-subtle);
+  }
+
+  .principle-item h3 {
+    font-size: 1rem;
+    margin-block-end: 0.4rem;
+  }
+
+  .principle-item p {
+    font-size: 0.88rem;
+    line-height: 1.58;
+  }
+
+  .principle-item strong {
+    color: var(--text-primary);
+  }
+
+  .leadership-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .founder-card {
+    padding: 1.65rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.65rem;
+  }
+
+  .founder-card__head {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-block-end: 0.35rem;
+  }
+
+  .founder-card__avatar {
+    inline-size: 3.4rem;
+    block-size: 3.4rem;
+    border-radius: var(--radius-lg);
+    background: #0b0f1a;
+    color: #f8fafc;
+    border: 2px solid var(--brand-accent);
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .founder-card__loc {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.74rem;
+    color: var(--text-muted);
+    margin-block-start: 0.35rem;
+  }
+
+  .founder-card__name {
+    font-size: 1.2rem;
+  }
+
+  .founder-card__role {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--brand-accent);
+  }
+
+  .founder-card__bio {
+    font-size: 0.89rem;
+    line-height: 1.58;
+    margin-block-end: 0.45rem;
+  }
+
+  .tech-drawer {
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 0.95rem 1.15rem;
+  }
+
+  .tech-drawer__summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    cursor: pointer;
+    font-size: 0.86rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    list-style: none;
+  }
+
+  .tech-drawer__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .tech-drawer__chevron {
+    transition: transform 180ms ease;
+    color: var(--text-muted);
+  }
+
+  .tech-drawer[open] .tech-drawer__chevron {
+    transform: rotate(180deg);
+  }
+
+  .tech-drawer__content {
+    margin-block-start: 0.85rem;
+    padding-block-start: 0.85rem;
+    border-block-start: 1px solid var(--border-subtle);
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    font-size: 0.82rem;
+  }
+
+  .tech-drawer__specs {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+  }
+
+  .tech-drawer__specs strong {
+    color: var(--text-primary);
+  }
+
+  @media (max-width: 900px) {
+    .about-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .principles-list {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

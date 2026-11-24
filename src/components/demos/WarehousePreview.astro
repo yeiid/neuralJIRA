@@ -1,0 +1,474 @@
+---
+interface Props {
+  compact?: boolean;
+  uid?: string;
+}
+const { compact = false, uid = 'wh' } = Astro.props;
+
+const zones = [
+  {
+    id: 'A1',
+    name: 'Zona A1 · Bebidas & Barriles',
+    occupancy: 84,
+    units: '1.420 u',
+    status: 'Despacho activo',
+    skus: '38 SKUs · 0 quiebres',
+    alert: 'Rotación alta · Evento Central',
+  },
+  {
+    id: 'B2',
+    name: 'Zona B2 · Cadena de Frío',
+    occupancy: 67,
+    units: '890 u',
+    status: 'Óptimo',
+    skus: '24 SKUs · 4 °C estable',
+    alert: 'Sin alertas pendientes',
+  },
+  {
+    id: 'C3',
+    name: 'Zona C3 · Insumos & Merch',
+    occupancy: 92,
+    units: '2.110 u',
+    status: 'Reubicar pronto',
+    skus: '51 SKUs · Cap. casi llena',
+    alert: 'Sugerido mover lote #408 a D4',
+  },
+  {
+    id: 'D4',
+    name: 'Zona D4 · Muelle de Salida',
+    occupancy: 41,
+    units: '530 u',
+    status: 'Listo para cargue',
+    skus: '14 órdenes validadas QR',
+    alert: '2 camiones en turno',
+  },
+];
+---
+
+<div
+  class:list={['wh-demo', { 'wh-demo--compact': compact }]}
+  data-wh-widget={uid}
+  data-zones={JSON.stringify(zones)}
+>
+  <div class="wh-demo__bar">
+    <div class="wh-demo__brand">
+      <span class="wh-demo__dot" aria-hidden="true"></span>
+      <span class="font-mono">InventarioADN · Gemelo 3D</span>
+    </div>
+    <span class="wh-demo__tag font-mono">Three.js · FastAPI</span>
+  </div>
+
+  <div class="wh-demo__body">
+    <!-- Interactive Architectural Isometric Floorplan -->
+    <div class="wh-demo__stage" role="group" aria-label="Mapa interactivo de zonas de bodega">
+      <svg viewBox="0 0 360 210" class="wh-demo__svg" role="img" aria-label="Plano isométrico interactivo de 4 zonas de estantería">
+        <!-- Floor isometric slab -->
+        <polygon points="180,18 342,96 180,192 18,96" class="iso-floor" />
+        <!-- Subtle grid lines -->
+        <line x1="99" y1="57" x2="261" y2="144" class="iso-grid" />
+        <line x1="261" y1="57" x2="99" y2="144" class="iso-grid" />
+
+        <!-- Zone A1 -->
+        <g class="iso-rack is-selected" data-zone-trigger="A1" tabindex="0" role="button" aria-label="Seleccionar Zona A1, 84 por ciento de ocupación">
+          <polygon points="122,68 176,42 204,56 150,82" class="rack-top" />
+          <polygon points="122,68 150,82 150,104 122,90" class="rack-left" />
+          <polygon points="150,82 204,56 204,78 150,104" class="rack-right" />
+          <text x="163" y="65" class="rack-label">A1 · 84%</text>
+        </g>
+
+        <!-- Zone B2 -->
+        <g class="iso-rack" data-zone-trigger="B2" tabindex="0" role="button" aria-label="Seleccionar Zona B2, 67 por ciento de ocupación">
+          <polygon points="196,104 250,78 278,92 224,118" class="rack-top" />
+          <polygon points="196,104 224,118 224,138 196,124" class="rack-left" />
+          <polygon points="224,118 278,92 278,112 224,138" class="rack-right" />
+          <text x="237" y="101" class="rack-label">B2 · 67%</text>
+        </g>
+
+        <!-- Zone C3 -->
+        <g class="iso-rack" data-zone-trigger="C3" tabindex="0" role="button" aria-label="Seleccionar Zona C3, 92 por ciento de ocupación">
+          <polygon points="74,94 128,68 156,82 102,108" class="rack-top" />
+          <polygon points="74,94 102,108 102,134 74,120" class="rack-left" />
+          <polygon points="102,108 156,82 156,108 102,134" class="rack-right" />
+          <text x="115" y="91" class="rack-label">C3 · 92%</text>
+        </g>
+
+        <!-- Zone D4 -->
+        <g class="iso-rack" data-zone-trigger="D4" tabindex="0" role="button" aria-label="Seleccionar Zona D4, 41 por ciento de ocupación">
+          <polygon points="146,132 200,106 228,120 174,146" class="rack-top" />
+          <polygon points="146,132 174,146 174,162 146,148" class="rack-left" />
+          <polygon points="174,146 228,120 228,136 174,162" class="rack-right" />
+          <text x="187" y="129" class="rack-label">D4 · 41%</text>
+        </g>
+      </svg>
+
+      <div class="wh-demo__pills" role="group" aria-label="Accesos rápidos de zonas">
+        {zones.map((z, idx) => (
+          <button
+            type="button"
+            class:list={['wh-pill font-mono', { 'is-selected': idx === 0 }]}
+            data-zone-btn={z.id}
+            aria-pressed={idx === 0 ? 'true' : 'false'}
+          >
+            {z.id}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <!-- Live Zone Telemetry -->
+    <div class="wh-demo__telemetry" aria-live="polite">
+      <div class="wh-demo__zone-head">
+        <strong data-wh-name>{zones[0].name}</strong>
+        <span class="wh-demo__status" data-wh-status>{zones[0].status}</span>
+      </div>
+
+      <div class="wh-demo__meter-wrap">
+        <div class="wh-demo__meter-head font-mono">
+          <span>Ocupación rack</span>
+          <strong class="tabular-nums" data-wh-occ>{zones[0].occupancy}%</strong>
+        </div>
+        <div class="wh-demo__meter">
+          <span class="wh-demo__meter-fill" data-wh-bar style={`width: ${zones[0].occupancy}%`} />
+        </div>
+      </div>
+
+      <dl class="wh-demo__kpis">
+        <div>
+          <dt>Stock activo</dt>
+          <dd class="tabular-nums font-mono" data-wh-units>{zones[0].units}</dd>
+        </div>
+        <div>
+          <dt>Trazabilidad</dt>
+          <dd data-wh-skus>{zones[0].skus}</dd>
+        </div>
+      </dl>
+
+      <p class="wh-demo__note" data-wh-alert>{zones[0].alert}</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-wh-widget]').forEach((root) => {
+    const raw = root.dataset.zones;
+    if (!raw) return;
+    type Zone = { id: string; name: string; occupancy: number; units: string; status: string; skus: string; alert: string };
+    const zones: Zone[] = JSON.parse(raw);
+
+    const nameEl = root.querySelector('[data-wh-name]');
+    const statusEl = root.querySelector('[data-wh-status]');
+    const occEl = root.querySelector('[data-wh-occ]');
+    const barEl = root.querySelector<HTMLElement>('[data-wh-bar]');
+    const unitsEl = root.querySelector('[data-wh-units]');
+    const skusEl = root.querySelector('[data-wh-skus]');
+    const alertEl = root.querySelector('[data-wh-alert]');
+
+    function selectZone(id: string) {
+      const zone = zones.find((z) => z.id === id);
+      if (!zone) return;
+
+      if (nameEl) nameEl.textContent = zone.name;
+      if (statusEl) statusEl.textContent = zone.status;
+      if (occEl) occEl.textContent = `${zone.occupancy}%`;
+      if (barEl) barEl.style.width = `${zone.occupancy}%`;
+      if (unitsEl) unitsEl.textContent = zone.units;
+      if (skusEl) skusEl.textContent = zone.skus;
+      if (alertEl) alertEl.textContent = zone.alert;
+
+      root.querySelectorAll<SVGGElement>('[data-zone-trigger]').forEach((g) => {
+        g.classList.toggle('is-selected', g.dataset.zoneTrigger === id);
+      });
+      root.querySelectorAll<HTMLButtonElement>('[data-zone-btn]').forEach((b) => {
+        const active = b.dataset.zoneBtn === id;
+        b.classList.toggle('is-selected', active);
+        b.setAttribute('aria-pressed', String(active));
+      });
+    }
+
+    root.querySelectorAll<SVGGElement>('[data-zone-trigger]').forEach((g) => {
+      g.addEventListener('click', () => {
+        if (g.dataset.zoneTrigger) selectZone(g.dataset.zoneTrigger);
+      });
+      g.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          if (g.dataset.zoneTrigger) selectZone(g.dataset.zoneTrigger);
+        }
+      });
+    });
+
+    root.querySelectorAll<HTMLButtonElement>('[data-zone-btn]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (btn.dataset.zoneBtn) selectZone(btn.dataset.zoneBtn);
+      });
+    });
+  });
+</script>
+
+<style>
+  .wh-demo {
+    background: var(--surface-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    block-size: 100%;
+  }
+
+  .wh-demo__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.65rem 1rem;
+    background: var(--surface-subtle);
+    border-block-end: 1px solid var(--border-subtle);
+    font-size: 0.74rem;
+    color: var(--text-secondary);
+  }
+
+  .wh-demo__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .wh-demo__dot {
+    inline-size: 8px;
+    block-size: 8px;
+    border-radius: 50%;
+    background: var(--status-success);
+  }
+
+  .wh-demo__tag {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+  }
+
+  .wh-demo__body {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 1rem;
+    padding: 1rem;
+    align-items: center;
+    flex: 1;
+  }
+
+  .wh-demo--compact .wh-demo__body {
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
+    padding: 0.75rem;
+  }
+
+  .wh-demo--compact .wh-demo__svg {
+    max-block-size: 10.5rem;
+    margin-inline: auto;
+  }
+
+  .wh-demo--compact .wh-demo__telemetry {
+    gap: 0.5rem;
+  }
+
+  .wh-demo--compact .wh-demo__note {
+    display: none;
+  }
+
+  @media (max-width: 640px) {
+    .wh-demo__body {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .wh-demo__stage {
+    background: var(--surface-inset);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 0.65rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .wh-demo__svg {
+    inline-size: 100%;
+    block-size: auto;
+  }
+
+  .iso-floor {
+    fill: var(--surface-elevated);
+    stroke: var(--border-strong);
+    stroke-width: 1;
+  }
+
+  .iso-grid {
+    stroke: var(--border-subtle);
+    stroke-width: 1;
+    stroke-dasharray: 3 3;
+  }
+
+  .iso-rack {
+    cursor: pointer;
+    outline: none;
+    transition: opacity 150ms ease;
+  }
+
+  .iso-rack:focus-visible .rack-top {
+    stroke: var(--brand-accent);
+    stroke-width: 2.5;
+  }
+
+  .rack-top {
+    fill: var(--surface-subtle);
+    stroke: var(--border-strong);
+    stroke-width: 1.1;
+    transition: fill 180ms ease, stroke 180ms ease;
+  }
+
+  .rack-left {
+    fill: color-mix(in oklab, var(--text-muted) 22%, var(--surface-elevated));
+    stroke: var(--border-strong);
+    stroke-width: 1;
+  }
+
+  .rack-right {
+    fill: color-mix(in oklab, var(--text-muted) 12%, var(--surface-elevated));
+    stroke: var(--border-strong);
+    stroke-width: 1;
+  }
+
+  .rack-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 700;
+    fill: var(--text-primary);
+    text-anchor: middle;
+    pointer-events: none;
+  }
+
+  .iso-rack:hover .rack-top,
+  .iso-rack.is-selected .rack-top {
+    fill: var(--brand-accent);
+    stroke: var(--brand-accent);
+  }
+
+  .iso-rack.is-selected .rack-left {
+    fill: color-mix(in oklab, var(--brand-accent) 72%, black);
+  }
+
+  .iso-rack.is-selected .rack-right {
+    fill: color-mix(in oklab, var(--brand-accent) 48%, var(--surface-elevated));
+  }
+
+  .iso-rack:hover .rack-label,
+  .iso-rack.is-selected .rack-label {
+    fill: var(--brand-on-accent);
+  }
+
+  .wh-demo__pills {
+    display: flex;
+    gap: 0.4rem;
+    justify-content: center;
+  }
+
+  .wh-pill {
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 0.25rem 0.65rem;
+    min-block-size: 1.9rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-subtle);
+    background: var(--surface-elevated);
+    color: var(--text-secondary);
+    transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
+  }
+
+  .wh-pill.is-selected {
+    background: var(--brand-accent);
+    color: var(--brand-on-accent);
+    border-color: var(--brand-accent);
+  }
+
+  .wh-demo__telemetry {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .wh-demo__zone-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.4rem;
+    font-size: 0.88rem;
+  }
+
+  .wh-demo__status {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    padding: 0.16rem 0.5rem;
+    border-radius: var(--radius-pill);
+    background: var(--brand-accent-soft);
+    color: var(--brand-accent);
+    font-weight: 600;
+  }
+
+  .wh-demo__meter-head {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-block-end: 0.35rem;
+  }
+
+  .wh-demo__meter {
+    block-size: 7px;
+    border-radius: var(--radius-pill);
+    background: var(--surface-inset);
+    overflow: hidden;
+  }
+
+  .wh-demo__meter-fill {
+    display: block;
+    block-size: 100%;
+    background: var(--brand-accent);
+    border-radius: inherit;
+    transition: width 260ms var(--ease-out);
+  }
+
+  .wh-demo__kpis {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    margin: 0;
+  }
+
+  .wh-demo__kpis > div {
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: 0.5rem 0.65rem;
+  }
+
+  .wh-demo__kpis dt {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-block-end: 0.15rem;
+  }
+
+  .wh-demo__kpis dd {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .wh-demo__note {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    padding-block-start: 0.35rem;
+    border-block-start: 1px solid var(--border-subtle);
+  }
+</style>

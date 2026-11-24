@@ -1,0 +1,321 @@
+/* ═══════════════════════════════════════════════════════════════════
+   NeuralJIRA Official Design Tokens — Modern Layered Architecture
+   Ecosystem Palette: Deep Ink (#0B0F1A) · Orange (#F97316) · Electric (#38BDF8)
+   3-Tier Token System + light-dark() + color-mix(in oklab)
+   All text/surface pairs >= 4.5:1 (AA) & UI boundaries >= 3:1 (WCAG 1.4.11)
+   ═══════════════════════════════════════════════════════════════════ */
+
+@layer reset, base, theme, components, utilities;
+
+@layer theme {
+  :root {
+    /* ── Native color scheme negotiation (follows OS unless overridden via <meta>) ── */
+    color-scheme: light dark;
+
+    /* ── Tier 1: Primitive palette pairs (Light / Dark) ── */
+    --surface-canvas-light: #f8fafc;
+    --surface-canvas-dark: #0b0f1a;        /* Official --ink */
+
+    --surface-subtle-light: #f1f5f9;
+    --surface-subtle-dark: #111827;        /* Official --deep */
+
+    --surface-elevated-light: #ffffff;
+    --surface-elevated-dark: #1a2235;      /* Official --panel */
+
+    --surface-inset-light: #e8eef5;
+    --surface-inset-dark: #0f1626;
+
+    --surface-inverse-light: #0b0f1a;
+    --surface-inverse-dark: #f8fafc;
+
+    --text-primary-light: #0f172a;         /* 17.1:1 on #f8fafc */
+    --text-primary-dark: #f8fafc;          /* 18.3:1 on #0b0f1a (Official --white) */
+
+    --text-secondary-light: #334155;       /* 9.9:1 on #f8fafc */
+    --text-secondary-dark: #cbd5e1;        /* 12.9:1 on #0b0f1a (Official --text) */
+
+    --text-muted-light: #475569;           /* 7.2:1 on #f8fafc */
+    --text-muted-dark: #94a3b8;            /* 7.5:1 on #0b0f1a, 6.2:1 on #1a2235 (AA+ slate) */
+
+    --text-inverse-light: #f8fafc;
+    --text-inverse-dark: #0b0f1a;
+
+    --border-subtle-light: #e2e8f0;
+    --border-subtle-dark: #252e42;         /* Official --border */
+
+    --border-strong-light: #7c8b9e;        /* 3.47:1 on #ffffff (WCAG 1.4.11) */
+    --border-strong-dark: #5f6f86;         /* 3.10:1 on #1a2235 (WCAG 1.4.11) */
+
+    /* Primary Brand Accent: Official NeuralJIRA Orange (#F97316 / #FB923C) */
+    --brand-accent-light: #c2410c;         /* 4.95:1 on #f8fafc, 4.73:1 on #f1f5f9 */
+    --brand-accent-dark: #f97316;          /* 6.83:1 on #0b0f1a, 5.66:1 on #1a2235 */
+    --brand-accent-hover-light: #9a3412;
+    --brand-accent-hover-dark: #fb923c;    /* Official --accent2 */
+    --brand-on-accent-light: #ffffff;      /* 5.18:1 on #c2410c */
+    --brand-on-accent-dark: #0b0f1a;       /* 6.83:1 on #f97316 */
+
+    /* Secondary Brand Accent: Official Electric Blue (#38BDF8) */
+    --brand-secondary-light: #0369a1;      /* 5.42:1 on #f1f5f9 */
+    --brand-secondary-dark: #38bdf8;       /* 8.93:1 on #0b0f1a */
+    --brand-on-secondary-light: #ffffff;
+    --brand-on-secondary-dark: #0b0f1a;
+
+    /* Dedicated Seasonal Campaign Accent (defaults to brand; overridden cleanly in themes.css
+       so seasonal editions flavor banners/ornaments without erasing NeuralJIRA Orange) */
+    --season-accent-light: var(--brand-accent-light);
+    --season-accent-dark: var(--brand-accent-dark);
+    --season-accent-hover-light: var(--brand-accent-hover-light);
+    --season-accent-hover-dark: var(--brand-accent-hover-dark);
+    --season-on-accent-light: var(--brand-on-accent-light);
+    --season-on-accent-dark: var(--brand-on-accent-dark);
+    --season-secondary-light: var(--brand-secondary-light);
+    --season-secondary-dark: var(--brand-secondary-dark);
+
+    /* Semantic Status Colors (AA verified — Official --green / --red) */
+    --status-success-light: #047857;       /* 5.01:1 on #f1f5f9 */
+    --status-success-dark: #34d399;        /* 9.95:1 on #0b0f1a */
+    --status-danger-light: #b91c1c;
+    --status-danger-dark: #f87171;
+    --status-warning-light: #b45309;
+    --status-warning-dark: #fbbf24;
+
+    /* Header backdrop */
+    --header-bg-light: rgba(248, 250, 252, 0.88);
+    --header-bg-dark: rgba(11, 15, 26, 0.86);
+
+    /* Scrollbar (thumb >= 3:1 against track & canvas) */
+    --scrollbar-track-light: #f1f5f9;
+    --scrollbar-track-dark: #111827;
+    --scrollbar-thumb-light: #64748b;      /* 4.76:1 vs white */
+    --scrollbar-thumb-dark: #64748b;       /* 4.02:1 vs #0b0f1a */
+
+    /* Ambient Hero Washes (warm orange top-left + electric blue bottom-right) */
+    --ambient-wash-1-light: rgba(249, 115, 22, 0.08);
+    --ambient-wash-1-dark: rgba(249, 115, 22, 0.14);
+    --ambient-wash-2-light: rgba(56, 189, 248, 0.08);
+    --ambient-wash-2-dark: rgba(56, 189, 248, 0.12);
+
+    /* Shadows */
+    --shadow-sm-light: 0 1px 2px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(15, 23, 42, 0.04);
+    --shadow-sm-dark: 0 2px 6px rgba(0, 0, 0, 0.35);
+    --shadow-md-light: 0 6px 20px -4px rgba(15, 23, 42, 0.08), 0 2px 6px -2px rgba(15, 23, 42, 0.04);
+    --shadow-md-dark: 0 14px 32px -8px rgba(0, 0, 0, 0.6);
+    --shadow-lg-light: 0 20px 44px -12px rgba(15, 23, 42, 0.14), 0 4px 12px -4px rgba(15, 23, 42, 0.06);
+    --shadow-lg-dark: 0 24px 56px -14px rgba(0, 0, 0, 0.74);
+
+    /* ── Tier 2: Semantic Tokens (Fallback for browsers without light-dark()) ── */
+    --surface-canvas: var(--surface-canvas-light);
+    --surface-elevated: var(--surface-elevated-light);
+    --surface-subtle: var(--surface-subtle-light);
+    --surface-inset: var(--surface-inset-light);
+    --surface-inverse: var(--surface-inverse-light);
+
+    --text-primary: var(--text-primary-light);
+    --text-secondary: var(--text-secondary-light);
+    --text-muted: var(--text-muted-light);
+    --text-inverse: var(--text-inverse-light);
+
+    --border-subtle: var(--border-subtle-light);
+    --border-strong: var(--border-strong-light);
+
+    --brand-accent: var(--brand-accent-light);
+    --brand-accent-hover: var(--brand-accent-hover-light);
+    --brand-on-accent: var(--brand-on-accent-light);
+    --brand-secondary: var(--brand-secondary-light);
+    --brand-on-secondary: var(--brand-on-secondary-light);
+
+    --season-accent: var(--season-accent-light);
+    --season-accent-hover: var(--season-accent-hover-light);
+    --season-on-accent: var(--season-on-accent-light);
+    --season-secondary: var(--season-secondary-light);
+
+    --status-success: var(--status-success-light);
+    --status-danger: var(--status-danger-light);
+    --status-warning: var(--status-warning-light);
+
+    --header-bg: var(--header-bg-light);
+    --scrollbar-track: var(--scrollbar-track-light);
+    --scrollbar-thumb: var(--scrollbar-thumb-light);
+
+    --ambient-wash-1: var(--ambient-wash-1-light);
+    --ambient-wash-2: var(--ambient-wash-2-light);
+
+    --shadow-sm: var(--shadow-sm-light);
+    --shadow-md: var(--shadow-md-light);
+    --shadow-lg: var(--shadow-lg-light);
+
+    /* Derived Tints using oklab (avoids Chromium oklch low-chroma hue bug) */
+    --brand-accent-soft: color-mix(in oklab, var(--brand-accent) 12%, transparent);
+    --brand-accent-border: color-mix(in oklab, var(--brand-accent) 34%, transparent);
+    --brand-secondary-soft: color-mix(in oklab, var(--brand-secondary) 12%, transparent);
+    --brand-secondary-border: color-mix(in oklab, var(--brand-secondary) 34%, transparent);
+    --season-accent-soft: color-mix(in oklab, var(--season-accent) 12%, transparent);
+    --season-accent-border: color-mix(in oklab, var(--season-accent) 34%, transparent);
+    --status-success-soft: color-mix(in oklab, var(--status-success) 12%, transparent);
+    --status-danger-soft: color-mix(in oklab, var(--status-danger) 12%, transparent);
+
+    /* ── Typography (Official Brand Guide: Space Grotesk Display + JetBrains Mono) ── */
+    --font-display: 'Space Grotesk Variable', 'Space Grotesk', 'Plus Jakarta Sans Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --font-sans: 'Plus Jakarta Sans Variable', 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, 'Cascadia Code', monospace;
+
+    /* Fluid type scale (max <= 2.5 * min for WCAG 1.4.4 200% zoom compliance) */
+    --text-xs: 0.78rem;
+    --text-sm: 0.875rem;
+    --text-base: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: clamp(1.15rem, 1.05rem + 0.4vw, 1.35rem);
+    --text-2xl: clamp(1.5rem, 1.15rem + 1.4vw, 2.25rem);
+    --text-3xl: clamp(1.9rem, 1.35rem + 2.2vw, 3rem);
+    --text-hero: clamp(2.15rem, 1.4rem + 2.6vw, 3.6rem);
+
+    /* ── Spacing & Layout ── */
+    --container-max: 75rem; /* 1200px */
+    --gutter: clamp(1rem, 0.5rem + 2vw, 2rem);
+    --section-py: clamp(4rem, 3rem + 3.5vw, 6.5rem);
+    --header-height: 4.5rem;
+
+    /* ── Radii ── */
+    --radius-sm: 0.375rem;
+    --radius-md: 0.625rem;
+    --radius-lg: 1rem;
+    --radius-xl: 1.25rem;
+    --radius-pill: 9999px;
+
+    /* ── Motion ── */
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --duration-fast: 150ms;
+    --duration-base: 240ms;
+
+    /* Reflect explicit <meta name="color-scheme"> override back to CSS */
+    &:has(> head > meta[name="color-scheme"][content="dark"]) {
+      color-scheme: dark;
+      --shadow-sm: var(--shadow-sm-dark);
+      --shadow-md: var(--shadow-md-dark);
+      --shadow-lg: var(--shadow-lg-dark);
+    }
+
+    &:has(> head > meta[name="color-scheme"][content="light"]) {
+      color-scheme: light;
+      --shadow-sm: var(--shadow-sm-light);
+      --shadow-md: var(--shadow-md-light);
+      --shadow-lg: var(--shadow-lg-light);
+    }
+
+    /* Native Browser UI theming */
+    accent-color: var(--brand-accent);
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  }
+
+  /* Fallback for browsers without light-dark() when OS prefers dark */
+  @media (prefers-color-scheme: dark) {
+    :root:not(:has(> head > meta[name="color-scheme"][content="light"])) {
+      --surface-canvas: var(--surface-canvas-dark);
+      --surface-elevated: var(--surface-elevated-dark);
+      --surface-subtle: var(--surface-subtle-dark);
+      --surface-inset: var(--surface-inset-dark);
+      --surface-inverse: var(--surface-inverse-dark);
+      --text-primary: var(--text-primary-dark);
+      --text-secondary: var(--text-secondary-dark);
+      --text-muted: var(--text-muted-dark);
+      --text-inverse: var(--text-inverse-dark);
+      --border-subtle: var(--border-subtle-dark);
+      --border-strong: var(--border-strong-dark);
+      --brand-accent: var(--brand-accent-dark);
+      --brand-accent-hover: var(--brand-accent-hover-dark);
+      --brand-on-accent: var(--brand-on-accent-dark);
+      --brand-secondary: var(--brand-secondary-dark);
+      --brand-on-secondary: var(--brand-on-secondary-dark);
+      --season-accent: var(--season-accent-dark);
+      --season-accent-hover: var(--season-accent-hover-dark);
+      --season-on-accent: var(--season-on-accent-dark);
+      --season-secondary: var(--season-secondary-dark);
+      --status-success: var(--status-success-dark);
+      --status-danger: var(--status-danger-dark);
+      --status-warning: var(--status-warning-dark);
+      --header-bg: var(--header-bg-dark);
+      --scrollbar-track: var(--scrollbar-track-dark);
+      --scrollbar-thumb: var(--scrollbar-thumb-dark);
+      --ambient-wash-1: var(--ambient-wash-1-dark);
+      --ambient-wash-2: var(--ambient-wash-2-dark);
+      --shadow-sm: var(--shadow-sm-dark);
+      --shadow-md: var(--shadow-md-dark);
+      --shadow-lg: var(--shadow-lg-dark);
+    }
+  }
+
+  /* Modern automatic light-dark() resolution (follows color-scheme seamlessly) */
+  @supports (color: light-dark(white, black)) {
+    :root {
+      --surface-canvas: light-dark(var(--surface-canvas-light), var(--surface-canvas-dark));
+      --surface-elevated: light-dark(var(--surface-elevated-light), var(--surface-elevated-dark));
+      --surface-subtle: light-dark(var(--surface-subtle-light), var(--surface-subtle-dark));
+      --surface-inset: light-dark(var(--surface-inset-light), var(--surface-inset-dark));
+      --surface-inverse: light-dark(var(--surface-inverse-light), var(--surface-inverse-dark));
+
+      --text-primary: light-dark(var(--text-primary-light), var(--text-primary-dark));
+      --text-secondary: light-dark(var(--text-secondary-light), var(--text-secondary-dark));
+      --text-muted: light-dark(var(--text-muted-light), var(--text-muted-dark));
+      --text-inverse: light-dark(var(--text-inverse-light), var(--text-inverse-dark));
+
+      --border-subtle: light-dark(var(--border-subtle-light), var(--border-subtle-dark));
+      --border-strong: light-dark(var(--border-strong-light), var(--border-strong-dark));
+
+      --brand-accent: light-dark(var(--brand-accent-light), var(--brand-accent-dark));
+      --brand-accent-hover: light-dark(var(--brand-accent-hover-light), var(--brand-accent-hover-dark));
+      --brand-on-accent: light-dark(var(--brand-on-accent-light), var(--brand-on-accent-dark));
+      --brand-secondary: light-dark(var(--brand-secondary-light), var(--brand-secondary-dark));
+      --brand-on-secondary: light-dark(var(--brand-on-secondary-light), var(--brand-on-secondary-dark));
+
+      --season-accent: light-dark(var(--season-accent-light), var(--season-accent-dark));
+      --season-accent-hover: light-dark(var(--season-accent-hover-light), var(--season-accent-hover-dark));
+      --season-on-accent: light-dark(var(--season-on-accent-light), var(--season-on-accent-dark));
+      --season-secondary: light-dark(var(--season-secondary-light), var(--season-secondary-dark));
+
+      --status-success: light-dark(var(--status-success-light), var(--status-success-dark));
+      --status-danger: light-dark(var(--status-danger-light), var(--status-danger-dark));
+      --status-warning: light-dark(var(--status-warning-light), var(--status-warning-dark));
+
+      --header-bg: light-dark(var(--header-bg-light), var(--header-bg-dark));
+      --scrollbar-track: light-dark(var(--scrollbar-track-light), var(--scrollbar-track-dark));
+      --scrollbar-thumb: light-dark(var(--scrollbar-thumb-light), var(--scrollbar-thumb-dark));
+
+      --ambient-wash-1: light-dark(var(--ambient-wash-1-light), var(--ambient-wash-1-dark));
+      --ambient-wash-2: light-dark(var(--ambient-wash-2-light), var(--ambient-wash-2-dark));
+    }
+  }
+
+  /* Legacy scrollbar fallback for older WebKit/Blink */
+  @supports not (scrollbar-color: auto) {
+    :root::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    :root::-webkit-scrollbar-track {
+      background: var(--scrollbar-track);
+    }
+    :root::-webkit-scrollbar-thumb {
+      background: var(--scrollbar-thumb);
+      border-radius: 5px;
+    }
+  }
+
+  /* Windows Forced Colors / High Contrast Mode support */
+  @media (forced-colors: active) {
+    :root {
+      --surface-canvas: Canvas;
+      --surface-elevated: Canvas;
+      --surface-subtle: Canvas;
+      --text-primary: CanvasText;
+      --text-secondary: CanvasText;
+      --text-muted: CanvasText;
+      --border-subtle: ButtonBorder;
+      --border-strong: CanvasText;
+      --brand-accent: Highlight;
+      --brand-on-accent: HighlightText;
+      --brand-secondary: LinkText;
+      --season-accent: Highlight;
+      --season-on-accent: HighlightText;
+    }
+  }
+}

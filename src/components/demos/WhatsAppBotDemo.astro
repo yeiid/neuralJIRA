@@ -1,0 +1,249 @@
+---
+import Icon from '../Icon.astro';
+
+const scenarios = [
+  {
+    id: 'cotizar',
+    prompt: 'Necesito una landing page',
+    reply:
+      '¡Hola! Construimos landing pages comerciales rápidas y enfocadas en ventas por WhatsApp. Cuéntame a qué se dedica tu negocio y te preparamos una propuesta a medida con cronograma.',
+    crmTag: 'Lead Calificado · Landing Page',
+    crmStage: 'Solicitud registrada (0.8 s)',
+  },
+  {
+    id: 'cobertura',
+    prompt: '¿Trabajan en toda Colombia?',
+    reply:
+      'Sí, atendemos empresas en toda Colombia de forma 100% remota y sin límites de ubicación, con contrato formal, garantía de 30 días y facturación electrónica DIAN. ¿Agendamos un diagnóstico gratuito de 15 min?',
+    crmTag: 'Consulta Nacional · Nuevo prospecto',
+    crmStage: 'Agenda ofrecida automáticamente',
+  },
+  {
+    id: 'pos',
+    prompt: 'Busco un sistema sin internet',
+    reply:
+      'Nuestros sistemas Local-First operan en tu red local LAN aunque se caiga internet, con comandas QR y pantalla de cocina KDS. Te conecto de una vez con un arquitecto para una demo.',
+    crmTag: 'Software Local-First · Alta prioridad',
+    crmStage: 'Derivado a asesor humano',
+  },
+];
+---
+
+<div class="wa-sim" data-wa-sim data-scenarios={JSON.stringify(scenarios)}>
+  <div class="wa-sim__header">
+    <div class="wa-sim__identity">
+      <span class="wa-sim__avatar" aria-hidden="true">
+        <Icon name="whatsapp" size={16} />
+      </span>
+      <div>
+        <strong class="wa-sim__title">Simulador Bot WhatsApp IA</strong>
+        <span class="wa-sim__sub font-mono">Demo interactiva · Respuesta &lt; 1 s</span>
+      </div>
+    </div>
+    <span class="pill pill--success">En línea 24/7</span>
+  </div>
+
+  <div class="wa-sim__chat" data-wa-feed aria-live="polite">
+    <div class="wa-msg wa-msg--bot">
+      <p>Hola, soy el asistente comercial de prueba. Toca una consulta abajo para ver cómo atendemos y calificamos clientes automáticamente.</p>
+      <span class="wa-msg__meta font-mono">Asistente IA · Automático</span>
+    </div>
+  </div>
+
+  <div class="wa-sim__crm" data-wa-crm>
+    <span class="font-mono wa-sim__crm-label">CRM Sync:</span>
+    <span data-wa-crm-tag>Esperando interacción del cliente…</span>
+  </div>
+
+  <div class="wa-sim__prompts" role="group" aria-label="Preguntas de prueba para el bot">
+    {scenarios.map((s) => (
+      <button type="button" class="wa-sim__chip" data-wa-scenario={s.id}>
+        {s.prompt}
+      </button>
+    ))}
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-wa-sim]').forEach((root) => {
+    const raw = root.dataset.scenarios;
+    if (!raw) return;
+    type Scenario = { id: string; prompt: string; reply: string; crmTag: string; crmStage: string };
+    const scenarios: Scenario[] = JSON.parse(raw);
+
+    const feed = root.querySelector<HTMLElement>('[data-wa-feed]');
+    const crmTag = root.querySelector<HTMLElement>('[data-wa-crm-tag]');
+
+    root.querySelectorAll<HTMLButtonElement>('[data-wa-scenario]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const sc = scenarios.find((s) => s.id === btn.dataset.waScenario);
+        if (!sc || !feed) return;
+
+        feed.innerHTML = '';
+
+        const userMsg = document.createElement('div');
+        userMsg.className = 'wa-msg wa-msg--user';
+        userMsg.innerHTML = `<p></p><span class="wa-msg__meta font-mono">Cliente · Ahora</span>`;
+        const userP = userMsg.querySelector('p');
+        if (userP) userP.textContent = sc.prompt;
+        feed.appendChild(userMsg);
+
+        const botMsg = document.createElement('div');
+        botMsg.className = 'wa-msg wa-msg--bot';
+        botMsg.innerHTML = `<p></p><span class="wa-msg__meta font-mono">Asistente IA · ${sc.crmStage}</span>`;
+        const botP = botMsg.querySelector('p');
+        if (botP) botP.textContent = sc.reply;
+        feed.appendChild(botMsg);
+
+        if (crmTag) {
+          crmTag.textContent = `${sc.crmTag} — ${sc.crmStage}`;
+        }
+
+        root.querySelectorAll<HTMLButtonElement>('[data-wa-scenario]').forEach((b) => {
+          b.classList.toggle('is-active', b === btn);
+        });
+      });
+    });
+  });
+</script>
+
+<style>
+  .wa-sim {
+    background: var(--surface-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .wa-sim__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.9rem 1.15rem;
+    background: var(--surface-subtle);
+    border-block-end: 1px solid var(--border-subtle);
+  }
+
+  .wa-sim__identity {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+
+  .wa-sim__avatar {
+    inline-size: 2.15rem;
+    block-size: 2.15rem;
+    border-radius: var(--radius-md);
+    background: var(--status-success-soft);
+    color: var(--status-success);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .wa-sim__title {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    line-height: 1.25;
+  }
+
+  .wa-sim__sub {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+  }
+
+  .wa-sim__chat {
+    padding: 1.15rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    min-block-size: 11.5rem;
+    background: var(--surface-inset);
+  }
+
+  .wa-sim :global(.wa-msg) {
+    max-inline-size: 88%;
+    padding: 0.75rem 0.95rem;
+    border-radius: var(--radius-md);
+    font-size: 0.87rem;
+    line-height: 1.5;
+  }
+
+  .wa-sim :global(.wa-msg p) {
+    color: var(--text-primary);
+  }
+
+  .wa-sim :global(.wa-msg--bot) {
+    align-self: flex-start;
+    background: var(--surface-elevated);
+    border: 1px solid var(--border-subtle);
+  }
+
+  .wa-sim :global(.wa-msg--user) {
+    align-self: flex-end;
+    background: var(--brand-accent);
+    color: var(--brand-on-accent);
+  }
+
+  .wa-sim :global(.wa-msg--user p),
+  .wa-sim :global(.wa-msg--user .wa-msg__meta) {
+    color: var(--brand-on-accent);
+  }
+
+  .wa-sim :global(.wa-msg__meta) {
+    display: block;
+    margin-block-start: 0.35rem;
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    opacity: 0.9;
+  }
+
+  .wa-sim__crm {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.6rem 1.15rem;
+    background: var(--surface-subtle);
+    border-block: 1px solid var(--border-subtle);
+    font-size: 0.76rem;
+    color: var(--text-secondary);
+  }
+
+  .wa-sim__crm-label {
+    color: var(--brand-accent);
+    font-weight: 600;
+  }
+
+  .wa-sim__prompts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.9rem 1.15rem;
+  }
+
+  .wa-sim__chip {
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 0.45rem 0.8rem;
+    min-block-size: 2.25rem;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--border-strong);
+    background: var(--surface-elevated);
+    color: var(--text-primary);
+    transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease;
+  }
+
+  .wa-sim__chip:hover,
+  .wa-sim__chip.is-active {
+    border-color: var(--brand-accent);
+    background: var(--brand-accent-soft);
+    color: var(--brand-accent);
+  }
+</style>
